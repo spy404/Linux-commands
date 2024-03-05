@@ -1,1774 +1,682 @@
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Linux Commands</title>
-    <style>
-      /* cspell:disable-file */
-      /* webkit printing magic: print all background colors */
-      html {
-        -webkit-print-color-adjust: exact;
-      }
-
-      * {
-        box-sizing: border-box;
-        -webkit-print-color-adjust: exact;
-      }
-
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-      }
-
-      @media only screen {
-        body {
-          margin: 2em auto;
-          max-width: 900px;
-          color: rgb(55, 53, 47);
-        }
-      }
-
-      body {
-        line-height: 1.5;
-        white-space: pre-wrap;
-      }
-
-      a,
-      a.visited {
-        color: inherit;
-        text-decoration: underline;
-      }
-
-      .pdf-relative-link-path {
-        font-size: 80%;
-        color: #444;
-      }
-
-      h1,
-      h2,
-      h3 {
-        letter-spacing: -0.01em;
-        line-height: 1.2;
-        font-weight: 600;
-        margin-bottom: 0;
-      }
-
-      .page-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-top: 0;
-        margin-bottom: 0.75em;
-      }
-
-      h1 {
-        font-size: 1.875rem;
-        margin-top: 1.875rem;
-      }
-
-      h2 {
-        font-size: 1.5rem;
-        margin-top: 1.5rem;
-      }
-
-      h3 {
-        font-size: 1.25rem;
-        margin-top: 1.25rem;
-      }
-
-      .source {
-        border: 1px solid #ddd;
-        border-radius: 3px;
-        padding: 1.5em;
-        word-break: break-all;
-      }
-
-      .callout {
-        border-radius: 3px;
-        padding: 1rem;
-      }
-
-      figure {
-        margin: 1.25em 0;
-        page-break-inside: avoid;
-      }
-
-      figcaption {
-        opacity: 0.5;
-        font-size: 85%;
-        margin-top: 0.5em;
-      }
-
-      mark {
-        background-color: transparent;
-      }
-
-      .indented {
-        padding-left: 1.5em;
-      }
-
-      hr {
-        background: transparent;
-        display: block;
-        width: 100%;
-        height: 1px;
-        visibility: visible;
-        border: none;
-        border-bottom: 1px solid rgba(55, 53, 47, 0.09);
-      }
-
-      img {
-        max-width: 100%;
-      }
-
-      @media only print {
-        img {
-          max-height: 100vh;
-          object-fit: contain;
-        }
-      }
-
-      @page {
-        margin: 1in;
-      }
-
-      .collection-content {
-        font-size: 0.875rem;
-      }
-
-      .column-list {
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .column {
-        padding: 0 1em;
-      }
-
-      .column:first-child {
-        padding-left: 0;
-      }
-
-      .column:last-child {
-        padding-right: 0;
-      }
-
-      .table_of_contents-item {
-        display: block;
-        font-size: 0.875rem;
-        line-height: 1.3;
-        padding: 0.125rem;
-      }
-
-      .table_of_contents-indent-1 {
-        margin-left: 1.5rem;
-      }
-
-      .table_of_contents-indent-2 {
-        margin-left: 3rem;
-      }
-
-      .table_of_contents-indent-3 {
-        margin-left: 4.5rem;
-      }
-
-      .table_of_contents-link {
-        text-decoration: none;
-        opacity: 0.7;
-        border-bottom: 1px solid rgba(55, 53, 47, 0.18);
-      }
-
-      table,
-      th,
-      td {
-        border: 1px solid rgba(55, 53, 47, 0.09);
-        border-collapse: collapse;
-      }
-
-      table {
-        border-left: none;
-        border-right: none;
-      }
-
-      th,
-      td {
-        font-weight: normal;
-        padding: 0.25em 0.5em;
-        line-height: 1.5;
-        min-height: 1.5em;
-        text-align: left;
-      }
-
-      th {
-        color: rgba(55, 53, 47, 0.6);
-      }
-
-      ol,
-      ul {
-        margin: 0;
-        margin-block-start: 0.6em;
-        margin-block-end: 0.6em;
-      }
-
-      li>ol:first-child,
-      li>ul:first-child {
-        margin-block-start: 0.6em;
-      }
-
-      ul>li {
-        list-style: disc;
-      }
-
-      ul.to-do-list {
-        padding-inline-start: 0;
-      }
-
-      ul.to-do-list>li {
-        list-style: none;
-      }
-
-      .to-do-children-checked {
-        text-decoration: line-through;
-        opacity: 0.375;
-      }
-
-      ul.toggle>li {
-        list-style: none;
-      }
-
-      ul {
-        padding-inline-start: 1.7em;
-      }
-
-      ul>li {
-        padding-left: 0.1em;
-      }
-
-      ol {
-        padding-inline-start: 1.6em;
-      }
-
-      ol>li {
-        padding-left: 0.2em;
-      }
-
-      .mono ol {
-        padding-inline-start: 2em;
-      }
-
-      .mono ol>li {
-        text-indent: -0.4em;
-      }
-
-      .toggle {
-        padding-inline-start: 0em;
-        list-style-type: none;
-      }
-
-      /* Indent toggle children */
-      .toggle>li>details {
-        padding-left: 1.7em;
-      }
-
-      .toggle>li>details>summary {
-        margin-left: -1.1em;
-      }
-
-      .selected-value {
-        display: inline-block;
-        padding: 0 0.5em;
-        background: rgba(206, 205, 202, 0.5);
-        border-radius: 3px;
-        margin-right: 0.5em;
-        margin-top: 0.3em;
-        margin-bottom: 0.3em;
-        white-space: nowrap;
-      }
-
-      .collection-title {
-        display: inline-block;
-        margin-right: 1em;
-      }
-
-      .page-description {
-        margin-bottom: 2em;
-      }
-
-      .simple-table {
-        margin-top: 1em;
-        font-size: 0.875rem;
-        empty-cells: show;
-      }
-
-      .simple-table td {
-        height: 29px;
-        min-width: 120px;
-      }
-
-      .simple-table th {
-        height: 29px;
-        min-width: 120px;
-      }
-
-      .simple-table-header-color {
-        background: rgb(247, 246, 243);
-        color: black;
-      }
-
-      .simple-table-header {
-        font-weight: 500;
-      }
-
-      time {
-        opacity: 0.5;
-      }
-
-      .icon {
-        display: inline-block;
-        max-width: 1.2em;
-        max-height: 1.2em;
-        text-decoration: none;
-        vertical-align: text-bottom;
-        margin-right: 0.5em;
-      }
-
-      img.icon {
-        border-radius: 3px;
-      }
-
-      .user-icon {
-        width: 1.5em;
-        height: 1.5em;
-        border-radius: 100%;
-        margin-right: 0.5rem;
-      }
-
-      .user-icon-inner {
-        font-size: 0.8em;
-      }
-
-      .text-icon {
-        border: 1px solid #000;
-        text-align: center;
-      }
-
-      .page-cover-image {
-        display: block;
-        object-fit: cover;
-        width: 100%;
-        max-height: 30vh;
-      }
-
-      .page-header-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-      }
-
-      .page-header-icon-with-cover {
-        margin-top: -0.72em;
-        margin-left: 0.07em;
-      }
-
-      .page-header-icon img {
-        border-radius: 3px;
-      }
-
-      .link-to-page {
-        margin: 1em 0;
-        padding: 0;
-        border: none;
-        font-weight: 500;
-      }
-
-      p>.user {
-        opacity: 0.5;
-      }
-
-      td>.user,
-      td>time {
-        white-space: nowrap;
-      }
-
-      input[type="checkbox"] {
-        transform: scale(1.5);
-        margin-right: 0.6em;
-        vertical-align: middle;
-      }
-
-      p {
-        margin-top: 0.5em;
-        margin-bottom: 0.5em;
-      }
-
-      .image {
-        border: none;
-        margin: 1.5em 0;
-        padding: 0;
-        border-radius: 0;
-        text-align: center;
-      }
-
-      .code,
-      code {
-        background: rgba(135, 131, 120, 0.15);
-        border-radius: 3px;
-        padding: 0.2em 0.4em;
-        border-radius: 3px;
-        font-size: 85%;
-        tab-size: 2;
-      }
-
-      code {
-        color: #eb5757;
-      }
-
-      .code {
-        padding: 1.5em 1em;
-      }
-
-      .code-wrap {
-        white-space: pre-wrap;
-        word-break: break-all;
-      }
-
-      .code>code {
-        background: none;
-        padding: 0;
-        font-size: 100%;
-        color: inherit;
-      }
-
-      blockquote {
-        font-size: 1.25em;
-        margin: 1em 0;
-        padding-left: 1em;
-        border-left: 3px solid rgb(55, 53, 47);
-      }
-
-      .bookmark {
-        text-decoration: none;
-        max-height: 8em;
-        padding: 0;
-        display: flex;
-        width: 100%;
-        align-items: stretch;
-      }
-
-      .bookmark-title {
-        font-size: 0.85em;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        height: 1.75em;
-        white-space: nowrap;
-      }
-
-      .bookmark-text {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .bookmark-info {
-        flex: 4 1 180px;
-        padding: 12px 14px 14px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-      }
-
-      .bookmark-image {
-        width: 33%;
-        flex: 1 1 180px;
-        display: block;
-        position: relative;
-        object-fit: cover;
-        border-radius: 1px;
-      }
-
-      .bookmark-description {
-        color: rgba(55, 53, 47, 0.6);
-        font-size: 0.75em;
-        overflow: hidden;
-        max-height: 4.5em;
-        word-break: break-word;
-      }
-
-      .bookmark-href {
-        font-size: 0.75em;
-        margin-top: 0.25em;
-      }
-
-      .sans {
-        font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
-      }
-
-      .code {
-        font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace;
-      }
-
-      .serif {
-        font-family: Lyon-Text, Georgia, ui-serif, serif;
-      }
-
-      .mono {
-        font-family: iawriter-mono, Nitti, Menlo, Courier, monospace;
-      }
-
-      .pdf .sans {
-        font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP';
-      }
-
-      .pdf:lang(zh-CN) .sans {
-        font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC';
-      }
-
-      .pdf:lang(zh-TW) .sans {
-        font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC';
-      }
-
-      .pdf:lang(ko-KR) .sans {
-        font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR';
-      }
-
-      .pdf .code {
-        font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP';
-      }
-
-      .pdf:lang(zh-CN) .code {
-        font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC';
-      }
-
-      .pdf:lang(zh-TW) .code {
-        font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC';
-      }
-
-      .pdf:lang(ko-KR) .code {
-        font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR';
-      }
-
-      .pdf .serif {
-        font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP';
-      }
-
-      .pdf:lang(zh-CN) .serif {
-        font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC';
-      }
-
-      .pdf:lang(zh-TW) .serif {
-        font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC';
-      }
-
-      .pdf:lang(ko-KR) .serif {
-        font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR';
-      }
-
-      .pdf .mono {
-        font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP';
-      }
-
-      .pdf:lang(zh-CN) .mono {
-        font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC';
-      }
-
-      .pdf:lang(zh-TW) .mono {
-        font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC';
-      }
-
-      .pdf:lang(ko-KR) .mono {
-        font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR';
-      }
-
-      .highlight-default {
-        color: rgba(55, 53, 47, 1);
-      }
-
-      .highlight-gray {
-        color: rgba(120, 119, 116, 1);
-        fill: rgba(120, 119, 116, 1);
-      }
-
-      .highlight-brown {
-        color: rgba(159, 107, 83, 1);
-        fill: rgba(159, 107, 83, 1);
-      }
-
-      .highlight-orange {
-        color: rgba(217, 115, 13, 1);
-        fill: rgba(217, 115, 13, 1);
-      }
-
-      .highlight-yellow {
-        color: rgba(203, 145, 47, 1);
-        fill: rgba(203, 145, 47, 1);
-      }
-
-      .highlight-teal {
-        color: rgba(68, 131, 97, 1);
-        fill: rgba(68, 131, 97, 1);
-      }
-
-      .highlight-blue {
-        color: rgba(51, 126, 169, 1);
-        fill: rgba(51, 126, 169, 1);
-      }
-
-      .highlight-purple {
-        color: rgba(144, 101, 176, 1);
-        fill: rgba(144, 101, 176, 1);
-      }
-
-      .highlight-pink {
-        color: rgba(193, 76, 138, 1);
-        fill: rgba(193, 76, 138, 1);
-      }
-
-      .highlight-red {
-        color: rgba(212, 76, 71, 1);
-        fill: rgba(212, 76, 71, 1);
-      }
-
-      .highlight-gray_background {
-        background: rgba(241, 241, 239, 1);
-      }
-
-      .highlight-brown_background {
-        background: rgba(244, 238, 238, 1);
-      }
-
-      .highlight-orange_background {
-        background: rgba(251, 236, 221, 1);
-      }
-
-      .highlight-yellow_background {
-        background: rgba(251, 243, 219, 1);
-      }
-
-      .highlight-teal_background {
-        background: rgba(237, 243, 236, 1);
-      }
-
-      .highlight-blue_background {
-        background: rgba(231, 243, 248, 1);
-      }
-
-      .highlight-purple_background {
-        background: rgba(244, 240, 247, 0.8);
-      }
-
-      .highlight-pink_background {
-        background: rgba(249, 238, 243, 0.8);
-      }
-
-      .highlight-red_background {
-        background: rgba(253, 235, 236, 1);
-      }
-
-      .block-color-default {
-        color: inherit;
-        fill: inherit;
-      }
-
-      .block-color-gray {
-        color: rgba(120, 119, 116, 1);
-        fill: rgba(120, 119, 116, 1);
-      }
-
-      .block-color-brown {
-        color: rgba(159, 107, 83, 1);
-        fill: rgba(159, 107, 83, 1);
-      }
-
-      .block-color-orange {
-        color: rgba(217, 115, 13, 1);
-        fill: rgba(217, 115, 13, 1);
-      }
-
-      .block-color-yellow {
-        color: rgba(203, 145, 47, 1);
-        fill: rgba(203, 145, 47, 1);
-      }
-
-      .block-color-teal {
-        color: rgba(68, 131, 97, 1);
-        fill: rgba(68, 131, 97, 1);
-      }
-
-      .block-color-blue {
-        color: rgba(51, 126, 169, 1);
-        fill: rgba(51, 126, 169, 1);
-      }
-
-      .block-color-purple {
-        color: rgba(144, 101, 176, 1);
-        fill: rgba(144, 101, 176, 1);
-      }
-
-      .block-color-pink {
-        color: rgba(193, 76, 138, 1);
-        fill: rgba(193, 76, 138, 1);
-      }
-
-      .block-color-red {
-        color: rgba(212, 76, 71, 1);
-        fill: rgba(212, 76, 71, 1);
-      }
-
-      .block-color-gray_background {
-        background: rgba(241, 241, 239, 1);
-      }
-
-      .block-color-brown_background {
-        background: rgba(244, 238, 238, 1);
-      }
-
-      .block-color-orange_background {
-        background: rgba(251, 236, 221, 1);
-      }
-
-      .block-color-yellow_background {
-        background: rgba(251, 243, 219, 1);
-      }
-
-      .block-color-teal_background {
-        background: rgba(237, 243, 236, 1);
-      }
-
-      .block-color-blue_background {
-        background: rgba(231, 243, 248, 1);
-      }
-
-      .block-color-purple_background {
-        background: rgba(244, 240, 247, 0.8);
-      }
-
-      .block-color-pink_background {
-        background: rgba(249, 238, 243, 0.8);
-      }
-
-      .block-color-red_background {
-        background: rgba(253, 235, 236, 1);
-      }
-
-      .select-value-color-uiBlue {
-        background-color: rgba(35, 131, 226, .07);
-      }
-
-      .select-value-color-pink {
-        background-color: rgba(245, 224, 233, 1);
-      }
-
-      .select-value-color-purple {
-        background-color: rgba(232, 222, 238, 1);
-      }
-
-      .select-value-color-green {
-        background-color: rgba(219, 237, 219, 1);
-      }
-
-      .select-value-color-gray {
-        background-color: rgba(227, 226, 224, 1);
-      }
-
-      .select-value-color-translucentGray {
-        background-color: rgba(255, 255, 255, 0.0375);
-      }
-
-      .select-value-color-orange {
-        background-color: rgba(250, 222, 201, 1);
-      }
-
-      .select-value-color-brown {
-        background-color: rgba(238, 224, 218, 1);
-      }
-
-      .select-value-color-red {
-        background-color: rgba(255, 226, 221, 1);
-      }
-
-      .select-value-color-yellow {
-        background-color: rgba(253, 236, 200, 1);
-      }
-
-      .select-value-color-blue {
-        background-color: rgba(211, 229, 239, 1);
-      }
-
-      .select-value-color-pageGlass {
-        background-color: undefined;
-      }
-
-      .select-value-color-washGlass {
-        background-color: undefined;
-      }
-
-      .checkbox {
-        display: inline-flex;
-        vertical-align: text-bottom;
-        width: 16;
-        height: 16;
-        background-size: 16px;
-        margin-left: 2px;
-        margin-right: 5px;
-      }
-
-      .checkbox-on {
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
-      }
-
-      .checkbox-off {
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
-      }
-    </style>
-  </head>
-  <body>
-    <article id="0a4333b6-e4ab-4ae6-aa10-d3fb282105ea" class="page sans">
-      <header>
-        <img class="page-cover-image" src="https://www.notion.so/images/page-cover/nasa_earth_grid.jpg" style="object-position:center 30.000000000000004%" />
-        <div class="page-header-icon page-header-icon-with-cover">
-          <span class="icon">🐧</span>
-        </div>
-        <h1 class="page-title">Linux Commands</h1>
-        <p class="page-description"></p>
-      </header>
-      <div class="page-body">
-        <p id="8bd4de6a-03fd-41ae-85ff-1de8a7c9c368" class=""></p>
-        <p id="7b69e829-37db-441d-841d-886ccea57b3a" class="">
-          <code>access</code>: Verifies user permissions for accessing files.
-        </p>
-        <p id="d30b9b56-b768-414e-b080-6007b4dfbb5b" class="">
-          <code>accton</code>: Controls process accounting activation.
-        </p>
-        <p id="ab55466e-cff1-445e-9802-11e39ae540fe" class="">
-          <code>aclocal</code>: Creates <code>aclocal.m4</code> from <code>aclocal.m4.in</code>.
-        </p>
-        <p id="e3dc50a9-8d7d-49e4-8f4d-09aa26c0db84" class="">
-          <code>acpi</code>: Retrieves information on ACPI devices.
-        </p>
-        <p id="edb807c4-729c-4149-85db-4bfc583465f0" class="">
-          <code>acpi_available</code>: Checks system&#x27;s ACPI availability.
-        </p>
-        <p id="09af689f-51ac-4a19-9456-0327e63eebf9" class="">
-          <code>acpid</code>: Manages ACPI events on the system.
-        </p>
-        <p id="755e2641-150a-42a1-8b7a-d4bd632ecdf7" class="">
-          <code>addr2line</code>: Resolves addresses to file names and line numbers.
-        </p>
-        <p id="7c48d130-b1f7-445f-a7b8-cb681794c3f8" class="">
-          <code>agetty</code>: Manages physical or virtual terminals.
-        </p>
-        <p id="b9fe710a-7570-415f-b047-7420b7c7c315" class="">
-          <code>alias</code>: Sets up command aliases.
-        </p>
-        <p id="1d0bca1f-cb51-4529-beb9-f0db6436decc" class="">
-          <code>amixer</code>: Adjusts audio mixer settings.
-        </p>
-        <p id="92a3e47b-fcec-4ec7-8ef0-bf4dd59f88c2" class="">
-          <code>aplay</code>: Plays audio files using ALSA.
-        </p>
-        <p id="72b9a003-83da-4cef-a73f-45926a09a755" class="">
-          <code>aplaymidi</code>: Plays MIDI files.
-        </p>
-        <p id="82d8e993-b32e-490a-86a0-0786d5c7bb7a" class="">
-          <code>apropos</code>: Searches manual page descriptions for keywords.
-        </p>
-        <p id="df9b8cb2-7642-4e6c-ad18-e36324ee1cc9" class="">
-          <code>apt</code>: High-level package management tool.
-        </p>
-        <p id="8a47de06-1718-47f8-95e2-c3e98d8eeb8e" class="">
-          <code>apt-get</code>: Command-line package manager for Debian-based systems.
-        </p>
-        <p id="67231bfa-f7e7-46cf-ad99-824574b9a75d" class="">
-          <code>aptitude</code>: Text-based package manager.
-        </p>
-        <p id="c6e04fa5-5545-42b8-840a-394aae6a8424" class="">
-          <code>ar</code>: Creates, modifies, or extracts from archives.
-        </p>
-        <p id="29fcf23d-b29a-4d63-ac60-3f1dace710b7" class="">
-          <code>arch</code>: Displays machine hardware name.
-        </p>
-        <p id="c0ecc854-5794-473d-965e-b6391f323c7a" class="">
-          <code>arp</code>: Manages ARP cache.
-        </p>
-        <p id="04f53181-2c11-46dd-9e3d-8882278910c8" class="">
-          <code>aspell</code>: Interactive spell checker.
-        </p>
-        <p id="f4eee4d2-e540-47e1-9db7-03ab0b8382c5" class="">
-          <code>atd</code>: Executes scheduled commands.
-        </p>
-        <p id="4be68d03-576f-4337-8b67-9d2acde9b3db" class="">
-          <code>atq</code>: Lists pending jobs.
-        </p>
-        <p id="c4fe5fc5-7680-4169-a479-5a398d98feb4" class="">
-          <code>atrm</code>: Removes jobs from the at queue.
-        </p>
-        <p id="c947c73c-9b0e-48c2-9e22-2c37b3d6b55a" class="">
-          <code>autoconf</code>: Configures software source code packages.
-        </p>
-        <p id="742382d9-232e-467d-8ade-420cecfd04eb" class="">
-          <code>autoheader</code>: Generates a header file template.
-        </p>
-        <p id="f897691d-4623-4449-94f2-92527d847101" class="">
-          <code>automake</code>: Creates <code>
-            <a href="http://makefile.in/">M</a>
-          </code>
-          <code>akefile.in</code> from <code>Makefile.am</code>.
-        </p>
-        <p id="a6d74b07-42ee-4c34-a510-7954f781836a" class="">
-          <code>autoreconf</code>: Updates configure scripts.
-        </p>
-        <p id="ecfcbb9a-5601-48d8-974c-3eb322efb815" class="">
-          <code>autoupdate</code>: Updates <code>configure.in</code> from macros.
-        </p>
-        <p id="f4259bed-2481-4466-9f3f-b038bb9ad459" class="">
-          <code>awk</code>: A powerful text processing and pattern matching tool.
-        </p>
-        <p id="0a105c57-d3bb-4d75-9c99-b6ea7daf5752" class="">
-          <code>banner</code>: Prints characters in large size.
-        </p>
-        <p id="5d363d4b-895b-4c3b-9119-b37e85bfe249" class="">
-          <code>basename</code>: Strips directory and suffix from filenames.
-        </p>
-        <p id="ba7d9d31-a11b-409e-8796-1ff6f5dfbbee" class="">
-          <code>batch</code>: Executes commands based on system load levels.
-        </p>
-        <p id="3829a430-7a47-4799-b897-2509e6715335" class="">
-          <code>bc</code>: Arbitrary-precision calculator language.
-        </p>
-        <p id="a7f45159-75fb-4b66-b9a6-051e656b7f32" class="">
-          <code>bg</code>: Resumes suspended jobs in the background.
-        </p>
-        <p id="b3d84b84-a299-462e-b194-c71d853e3039" class="">
-          <code>biff</code>: Notifies users of mail messages.
-        </p>
-        <p id="450880d7-4160-4674-a04f-7999b4ba9e7b" class="">
-          <code>bind</code>: Binds a name to a socket.
-        </p>
-        <p id="613dcb14-e7b9-4cfe-8526-f94283381ddb" class="">
-          <code>bison</code>: Parser generator for syntax analysis.
-        </p>
-        <p id="3c40b2ac-cbb6-4926-924a-2e1f5ff839f0" class="">
-          <code>break</code>: Exits a loop.
-        </p>
-        <p id="b76db605-aa55-4e39-8744-fbf2e3cf928c" class="">
-          <code>builtin</code>: Runs a built-in shell command.
-        </p>
-        <p id="da5dd0be-b6a6-48e5-b5d7-071be073133c" class="">
-          <code>bzcmp</code>: Compares bzip2 compressed files.
-        </p>
-        <p id="076746a9-bc17-4b31-8882-82cea85fedba" class="">
-          <code>bzdiff</code>: Compares bzip2 compressed files.
-        </p>
-        <p id="28597cb3-08b3-44fb-9157-626c6accce14" class="">
-          <code>bzgrep</code>: Searches patterns in bzip2 compressed files.
-        </p>
-        <p id="f9d1b9ea-29ce-47f7-9b20-8e07555570f8" class="">
-          <code>bzip2</code>: Compresses or decompresses files using the bzip2 algorithm.
-        </p>
-        <p id="c08f6654-fe12-4e6d-8296-6dce85ecdb9f" class="">
-          <code>bzless</code>: Views bzip2-compressed files.
-        </p>
-        <p id="fd5948d2-e055-4d53-ae79-1d0f5841b1fa" class="">
-          <code>bzmore</code>: Views bzip2-compressed files.
-        </p>
-        <p id="90017508-9ae3-4829-a396-0e99b2cf13cb" class="">
-          <code>cal</code>: Displays a calendar.
-        </p>
-        <p id="2077d3a1-03e7-47a7-aacf-ab8380de5075" class="">
-          <code>case</code>: Executes commands based on pattern matching.
-        </p>
-        <p id="1209857f-c104-4ead-80e5-0cc38db68da2" class="">
-          <code>cat</code>: Concatenates and displays files.
-        </p>
-        <p id="7f1cd5a6-cb88-417c-85aa-d641e0fb7cd4" class="">
-          <code>cc</code>: C compiler.
-        </p>
-        <p id="c01c40c8-4246-4a6f-bce0-ce1b2e9e0993" class="">
-          <code>ccrypt</code>: Encrypts and decrypts files.
-        </p>
-        <p id="ca45f203-319a-422e-928c-f63da1933416" class="">
-          <code>cd</code>: Changes the current directory.
-        </p>
-        <p id="17f5a94e-10f3-4251-94f6-129d2d92657f" class="">
-          <code>cfdisk</code>: Displays or manipulates disk partition tables.
-        </p>
-        <p id="927c083e-f252-4a07-9bf7-7d567bfc0372" class="">
-          <code>chage</code>: Modifies user password expiry information.
-        </p>
-        <p id="eb3c2ca5-78fa-49be-ad58-e68b73df5473" class="">
-          <code>chattr</code>: Changes file attributes on a Linux file system.
-        </p>
-        <p id="18561530-9ae3-40e9-8107-a4133047a028" class="">
-          <code>chfn</code>: Modifies user information.
-        </p>
-        <p id="e99efd70-cf68-482b-be23-bd0a2cc5084a" class="">
-          <code>chgrp</code>: Changes group ownership of files.
-        </p>
-        <p id="ca6d26c9-1246-443a-bfd8-bf02d33af4f8" class="">
-          <code>chmod</code>: Changes file mode bits.
-        </p>
-        <p id="4e9be3ba-3ade-4fe9-be59-f63b39b755a4" class="">
-          <code>chown</code>: Changes file owner and group.
-        </p>
-        <p id="f5c816ad-dc2a-4417-9a7f-9f5d5f586e63" class="">
-          <code>chpassw</code>: Modifies user password.
-        </p>
-        <p id="28b1b04a-e13b-4c36-82f9-bbba8fcc2f48" class="">
-          <code>chroot</code>: Changes the root directory for a command.
-        </p>
-        <p id="166e6931-6357-47c7-9419-20e7237c83a7" class="">
-          <code>chrt</code>: Modifies real-time attributes of a process.
-        </p>
-        <p id="5e1a609a-746a-4624-b4f7-b0e50499be6e" class="">
-          <code>chsh</code>: Changes the login shell for a user.
-        </p>
-        <p id="a7f801b9-8084-4a96-b17a-a66ab9bdd91e" class="">
-          <code>chvt</code>: Change to a different virtual terminal.
-        </p>
-        <p id="1da091d7-2fb5-4615-8ff5-4be8775dbd85" class="">
-          <code>cksum</code>: Calculate and display the checksum and byte count of a file.
-        </p>
-        <p id="3c12b0e1-6cff-4236-853c-e8487cbf27c8" class="">
-          <code>clear</code>: Clear the terminal screen.
-        </p>
-        <p id="88fd1073-c479-4af7-ba82-b1bca131ef98" class="">
-          <code>cmp</code>: Compare two files byte by byte.
-        </p>
-        <p id="797aba81-3092-4742-a2c9-8acd1bfd0e75" class="">
-          <code>col</code>: Filter reverse line feeds.
-        </p>
-        <p id="cbc729ba-af4f-4629-b2b6-88479b35a703" class="">
-          <code>colcrt</code>: Filter nroff output for CRT previewing.
-        </p>
-        <p id="ca822c85-1776-4bd7-8cbe-e977b6fa01ba" class="">
-          <code>colrm</code>: Remove columns from a file.
-        </p>
-        <p id="3dedc791-0252-40c7-be5a-6429f5bf140d" class="">
-          <code>column</code>: Columnate lists.
-        </p>
-        <p id="1ca1c8c6-0245-4438-b796-7fcb31211838" class="">
-          <code>comm</code>: Compare two sorted files line by line.
-        </p>
-        <p id="872ec4c5-6575-47f9-82b6-850e85099db6" class="">
-          <code>compress</code>: Compress files using Lempel-Ziv coding.
-        </p>
-        <p id="ca871afb-a67c-4e09-b560-a5f6f6c7fec1" class="">
-          <code>continue</code>: Resume the next iteration of a loop.
-        </p>
-        <p id="e0109c4a-80eb-4297-b600-8a6e12bdc2a2" class="">
-          <code>cp</code>: Copy files and directories.
-        </p>
-        <p id="8b7d885a-0b6c-4d0e-b9a9-a18b47ac13e5" class="">
-          <code>cpio</code>: Copy files to and from archives.
-        </p>
-        <p id="2e6f792d-5a7c-499f-9567-4822c3fb70aa" class="">
-          <code>cpp</code>: The C Preprocessor.
-        </p>
-        <p id="1ea66a68-8afc-4634-a7ce-7c4b7b5b89f8" class="">
-          <code>cron</code>: Daemon to execute scheduled commands.
-        </p>
-        <p id="ca4f09f2-1bbb-4fb6-a415-446ac0f34ff2" class="">
-          <code>crontab</code>: Schedule a command to run at a later time.
-        </p>
-        <p id="45f87048-565a-40e8-8596-1d32374bee95" class="">
-          <code>csplit</code>: Split a file into context-determined pieces.
-        </p>
-        <p id="ea1a8808-b9d3-49a9-b6ee-ea769cfba1e9" class="">
-          <code>ctags</code>: Create a tags file.
-        </p>
-        <p id="db5ac398-8c4e-4b8d-85ac-b6db71fe14e5" class="">
-          <code>cupsd</code>: Common UNIX Printing System daemon.
-        </p>
-        <p id="ce98957b-5399-4298-acca-c219d620c95b" class="">
-          <code>curl</code>: Transfer data from or to a server.
-        </p>
-        <p id="9850b9c5-89c4-4a1c-839c-e255c7aea67a" class="">
-          <code>cut</code>: Remove sections from each line of files.
-        </p>
-        <p id="aae4f81e-cfeb-487b-b82e-de649b3c7f15" class="">
-          <code>cvs</code>: Concurrent Versions System.
-        </p>
-        <p id="76c05e8b-1cf2-495d-82ef-3d2c397a65ef" class="">
-          <code>date</code>: Display or set the system date and time.
-        </p>
-        <p id="2a0f8c29-54d6-44f9-ab4d-15621fb80eca" class="">
-          <code>dc</code>: Desk Calculator.
-        </p>
-        <p id="3e76f28d-718f-4338-969a-8f407d91f00a" class="">
-          <code>dd</code>: Convert and copy a file.
-        </p>
-        <p id="842cd932-898c-4664-b253-c69e294547ed" class="">
-          <code>declare</code>: Declare variables and give them attributes.
-        </p>
-        <p id="fe73bbd5-d6a1-
-494e-9a54-7ffb593a9c14" class="">
-          <code>depmod</code>: Generate <code>modules.dep</code> and map files.
-        </p>
-        <p id="c10e8a83-f921-4cbf-bc02-5dc00992ec9c" class="">
-          <code>df</code>: Report file system disk space usage.
-        </p>
-        <p id="eb7a0528-d9fe-47b3-8c82-2d88efa3777c" class="">
-          <code>diff</code>: Compare files line by line.
-        </p>
-        <p id="4e1da048-fa44-440d-9132-4730526bc587" class="">
-          <code>diff3</code>: Show differences among three files.
-        </p>
-        <p id="f612ddb4-beb4-4025-97a4-d157c0d4c89d" class="">
-          <code>dig</code>: DNS lookup utility.
-        </p>
-        <p id="d6c3ac04-f93c-48f4-8eae-d59ce46c5986" class="">
-          <code>dir</code>: List directory contents.
-        </p>
-        <p id="7c873688-ce61-4364-9486-910cf5d80b27" class="">
-          <code>dirname</code>: Convert a full pathname to just a path.
-        </p>
-        <p id="c0b890aa-4bc0-4284-a7b9-87584f268ef3" class="">
-          <code>dirs</code>: Display list of remembered directories.
-        </p>
-        <p id="10b73ef4-0991-4399-8fd0-f67934ab9155" class="">
-          <code>disable</code>: Disable a shell builtin.
-        </p>
-        <p id="7641be05-29cc-4fdf-acc2-142655186b41" class="">
-          <code>dmesg</code>: Print or control the kernel ring buffer.
-        </p>
-        <p id="965dad01-6616-4ed2-8bd4-7939dfdf53f7" class="">
-          <code>dmidecode</code>: DMI table decoder.
-        </p>
-        <p id="1d524df4-8466-48bd-b9d8-03225801e741" class="">
-          <code>domainname</code>: Show or set the system’s NIS/YP domain name.
-        </p>
-        <p id="ffcff9e7-910e-47d2-897f-c33885fbec07" class="">
-          <code>dos2unix</code>: Convert text file format.
-        </p>
-        <p id="76b22fe0-197e-42e4-abfb-1c774562ebe5" class="">
-          <code>dosfsck</code>: Check and repair MS-DOS file systems.
-        </p>
-        <p id="d2494d28-f9e3-4363-9bcf-06c7743ddc9c" class="">
-          <code>dstat</code>: Versatile resource statistics tool.
-        </p>
-        <p id="992404a8-1814-4d8e-a9f1-1bda012cf1aa" class="">
-          <code>du</code>: Estimate file space usage.
-        </p>
-        <p id="924e7bd7-4f7e-45f5-b6df-dae8474ca986" class="">
-          <code>dump</code>: Dump file systems.
-        </p>
-        <p id="ecb05dec-8eff-44e6-a579-56e675d6844a" class="">
-          <code>dumpe2fs</code>: Dump ext2/ext3/ext4 filesystem information.
-        </p>
-        <p id="fb4b01ce-1d52-4e3f-b3ac-484f1264a005" class="">
-          <code>dumpkeys</code>: Dump keyboard translation tables.
-        </p>
-        <p id="f30206ff-f65c-44d1-b365-f4c3e2dad9cd" class="">
-          <code>ed</code>: The standard text editor.
-        </p>
-        <p id="ef586c6b-4f62-49a6-b80d-d2fb37ddcb85" class="">
-          <code>echo</code>: Display a line of text.
-        </p>
-        <p id="1efd2e0a-3465-4569-951c-e4c0be593a10" class="">
-          <code>egrep</code>: Search files for lines matching a pattern.
-        </p>
-        <p id="b7994875-53bd-4971-aa11-df4debd6c60e" class="">
-          <code>eject</code>: Eject removable media.
-        </p>
-        <p id="8247e21a-a731-4f34-9168-73150fd209b7" class="">
-          <code>emacs</code>: The extensible, customizable, self-documenting real-time display editor.
-        </p>
-        <p id="a3c19bbf-cb20-4cad-b532-8beb2c895c7f" class="">
-          <code>enable</code>: Enable and disable builtin shell commands.
-        </p>
-        <p id="af96eafe-d5cc-48cb-b0d9-1c76146f6446" class="">
-          <code>env</code>: Display, set, or remove environment variables.
-        </p>
-        <p id="e1356fca-1e0b-4146-b11c-b38520d52c1f" class="">
-          <code>eval</code>: Evaluate several commands or arguments.
-        </p>
-        <p id="0db06c5a-4249-4f51-bde9-a01e635b43d7" class="">
-          <code>ex</code>: Line editor.
-        </p>
-        <p id="3e668ad7-b7f4-4a10-b5b0-48ab703515ac" class="">
-          <code>exec</code>: Execute a command.
-        </p>
-        <p id="931d4f6d-ee98-4714-8401-44c20d58ba80" class="">
-          <code>exit</code>: Exit the shell.
-        </p>
-        <p id="c8632320-1f90-412d-9fd8-c6c0edf70ca6" class="">
-          <code>expand</code>: Convert tabs to spaces.
-        </p>
-        <p id="89b53130-0df2-455f-97ca-e47d7e10fa70" class="">
-          <code>expect</code>: Programmed dialogue with interactive programs.
-        </p>
-        <p id="6ebc2dd9-254e-4edf-9928-8ddcf0e7dfc4" class="">
-          <code>export</code>: Set an environment variable.
-        </p>
-        <p id="12432034-7d58-499e-b580-09f7a3c16d4f" class="">
-          <code>expr</code>: Evaluate expressions.
-        </p>
-        <p id="4b10ecac-f838-4d27-ad20-65b19c25f382" class="">
-          <code>factor</code>: Print prime factors.
-        </p>
-        <p id="b461debf-c213-4800-86be-3ddd9f5b2f72" class="">
-          <code>fc</code>: Fix command.
-        </p>
-        <p id="6d69ba99-2a85-4a97-b2d7-81f7d2e14191" class="">
-          <code>fc-cache</code>: Build font information cache files.
-        </p>
-        <p id="171a7d76-7857-42e2-b070-867c43eaa905" class="">
-          <code>fc-list</code>: List available fonts.
-        </p>
-        <p id="a53dabea-ab27-43e6-9733-518f12a144bc" class="">
-          <code>fdisk</code>: Partition table manipulator.
-        </p>
-        <p id="9c6327bc-d92b-4130-8d80-d3cc884a443f" class="">
-          <code>fg</code>: Send job to foreground.
-        </p>
-        <p id="9fb88d23-aaec-4dbc-9ff4-012aa72a1e3d" class="">
-          <code>fgrep</code>: Search files for fixed strings.
-        </p>
-        <p id="4e0eaf21-88d3-4cc4-a2dc-c75747e02152" class="">
-          <code>file</code>: Determine file type.
-        </p>
-        <p id="94c61aa9-7811-48a2-95aa-c338c1918ec5" class="">
-          <code>finger</code>: User information lookup program.
-        </p>
-        <p id="ba42a47e-a30f-4f88-88ad-fafd3b10e504" class="">
-          <code>fmt</code>: Reformat paragraph text.
-        </p>
-        <p id="11500c7e-750c-4b6a-b501-0351370755b8" class="">
-          <code>fold</code>: Wrap each input line to fit in specified width.
-        </p>
-        <p id="7b247780-7841-4b58-b55a-ea25c2656285" class="">
-          <code>for</code>: Expand words and execute commands.
-        </p>
-        <p id="b65a484b-c6af-4c2d-b5e5-3f353bf090b2" class="">
-          <code>free</code>: Display amount of free and used memory in the system.
-        </p>
-        <p id="b110d228-ac62-4bb5-885e-ce01d22e03bd" class="">
-          <code>function</code>: Define Function Macros.
-        </p>
-        <p id="f50d9746-9fd8-4f98-aa96-11df68fb6fdc" class="">
-          <code>g++</code>: GNU project C and C++ compiler.
-        </p>
-        <p id="4f9e37e9-fdc4-445c-849a-12c454bb706a" class="">
-          <code>gawk</code>: Find and Replace text within file(s).
-        </p>
-        <p id="5fbe5ed1-38b7-4ccf-bc8b-f25ac9f37b95" class="">
-          <code>gcc</code>: GNU project C and C++ compiler.
-        </p>
-        <p id="7500a708-ec2e-4044-be9f-7b492213bbc2" class="">
-          <code>gdb</code>: The GNU Debugger.
-        </p>
-        <p id="634565de-260b-41cf-ba2d-c46ccf6b9e62" class="">
-          <code>getent</code>: Get entries from administrative database.
-        </p>
-        <p id="3a598b1f-b134-47ce-a4de-54bb39a45300" class="">
-          <code>grep</code>: Search file(s) for lines matching a pattern.
-        </p>
-        <p id="09babb8d-0c3f-4821-985d-7ea166e7b3de" class="">
-          <code>gpassw</code>: Modify a group password.
-        </p>
-        <p id="49d40c12-e8e5-4d8a-bbc1-77a505560391" class="">
-          <code>groupadd</code>: Create a new group.
-        </p>
-        <p id="03fe4505-a460-4925-b29f-8376d1d62983" class="">
-          <code>groupdel</code>: Delete a group.
-        </p>
-        <p id="039f371a-65cd-41f0-a9cd-e48c324a883a" class="">
-          <code>groupmod</code>: Modify a group definition.
-        </p>
-        <p id="36336f7f-9fd0-4e1c-8745-57d3e651ff33" class="">
-          <code>groups</code>: Print group names a user is in.
-        </p>
-        <p id="9bf7b099-0ef5-4169-94c9-80a4041b457c" class="">
-          <code>grpck</code>: Verify integrity of group files.
-        </p>
-        <p id="fb63d48c-58d4-4335-a145-64c372d9f3e9" class="">
-          <code>grpconv</code>: Convert between textual and hashed group files.
-        </p>
-        <p id="d9dc0b74-554d-49d0-8d3e-ad5c0dbdf8c0" class="">
-          <code>gs</code>: Ghostscript (PostScript and PDF viewer).
-        </p>
-        <p id="e9289e36-9523-4bbf-9635-120770b753c6" class="">
-          <code>gunzip</code>: Decompress files compressed with gzip.
-        </p>
-        <p id="8f7a093b-5274-4b68-8c45-11ee3a44fa24" class="">
-          <code>gzexe</code>: Compress executable files in place.
-        </p>
-        <p id="d4fade38-43cb-432b-9ee3-7f75ab3c8829" class="">
-          <code>gzip</code>: Compress or decompress files.
-        </p>
-        <p id="bbced450-941f-46e2-9533-0b87209e5a36" class="">
-          <code>halt</code>: Stop the system.
-        </p>
-        <p id="97a114f3-4a95-4c4c-bd73-47d7cae366b8" class="">
-          <code>hash</code>: Remember the full pathname of a name argument.
-        </p>
-        <p id="6cf2b205-365d-4505-8c3c-ab4ea9c3f036" class="">
-          <code>hdparm</code>: Get/set hard disk parameters.
-        </p>
-        <p id="791a9156-a63b-4441-9bc3-d562337e4d29" class="">
-          <code>head</code>: Output the first part of files.
-        </p>
-        <p id="0f60dfcb-125c-47dd-a8ab-bd182438cdd8" class="">
-          <code>help</code>: Display help for a built-in command.
-        </p>
-        <p id="e056e535-1e4b-4355-bdbe-bc3843eb1879" class="">
-          <code>hexdump</code>: Display file contents in hexadecimal, decimal, octal, or ASCII.
-        </p>
-        <p id="7c128261-207a-40b6-8841-2d841a36320b" class="">
-          <code>history</code>: Command history for the current session.
-        </p>
-        <p id="392bfa3d-bf9c-4fb4-9bd1-4fe4770c0b89" class="">
-          <code>host</code>: DNS lookup utility.
-        </p>
-        <p id="2755b450-388b-42a5-a295-02ce8ed8ce45" class="">
-          <code>hostid</code>: Print numeric host identifier.
-        </p>
-        <p id="8353af54-1c21-424a-ac44-224a0af166bf" class="">
-          <code>hostname</code>: Print or set system name.
-        </p>
-        <p id="964cc5f8-a6a5-4281-969a-1547a5eb176e" class="">
-          <code>hostnamectl</code>: Control system hostname.
-        </p>
-        <p id="9f033fda-84e6-469d-804e-a4d126680df8" class="">
-          <code>htop</code>: Interactive process viewer.
-        </p>
-        <p id="bdf4c708-2b06-4b3e-8358-22e205c0789c" class="">
-          <code>hwclock</code>: Query and set the hardware clock (RTC).
-        </p>
-        <p id="7026750b-2ba0-430b-b8cf-10178ee6c999" class="">
-          <code>iconv</code>: Convert text from one character encoding to another.
-        </p>
-        <p id="cadf76d9-5f70-4a4e-912f-82b0aaa50c65" class="">
-          <code>id</code>: Print user identity.
-        </p>
-        <p id="41d27af1-4d05-44fb-927f-18eda4e3dd20" class="">
-          <code>if</code>: Conditionally perform a command.
-        </p>
-        <p id="75d2f5b8-6e55-4e3e-b417-0d0e88dcfa1d" class="">
-          <code>ifconfig</code>: Configure a network interface.
-        </p>
-        <p id="0c6bc33a-5914-435d-a565-4dc5c958a13d" class="">
-          <code>iftop</code>: Display bandwidth usage on an interface.
-        </p>
-        <p id="78df789b-df69-4dae-8b3a-f063ccf13782" class="">
-          <code>ifup</code>: Bring a network interface up.
-        </p>
-        <p id="c268ac61-a3ef-4def-b2d5-a4dd162a779a" class="">
-          <code>import</code>: Capture and save a screenshot.
-        </p>
-        <p id="e3dbfa28-59b2-40e2-897c-34c3869a61b1" class="">
-          <code>info</code>: Help information for commands.
-        </p>
-        <p id="657e1b12-381c-4600-875d-62405594f135" class="">
-          <code>insmod</code>: Insert a module into the Linux kernel.
-        </p>
-        <p id="b9486afa-0ebe-4b7a-95dc-5180ff439e0d" class="">
-          <code>install</code>: Copy files and set attributes.
-        </p>
-        <p id="0c1b31d0-7792-473a-87bf-4235c3df5a47" class="">
-          <code>iostat</code>: Report CPU and input/output statistics.
-        </p>
-        <p id="67e02481-2b43-4213-85e0-634c3deed85f" class="">
-          <code>iotop</code>: Display I/O usage by process.
-        </p>
-        <p id="ceef0607-0ce1-4d7e-85a8-f2349183ade0" class="">
-          <code>ip</code>: Show/manipulate routing, devices, policy routing, and tunnels. </ p>
-        <p id="23036f8b-08e2-4783-8fc3-5cce33f8796c" class="">
-          <code>ipcrm</code>: Remove a message queue, semaphore set, or shared memory segment.
-        </p>
-        <p id="ce4a91a6-38f0-4898-9a75-caef9b591855" class="">
-          <code>ipcs</code>: Report inter-process communication facilities status.
-        </p>
-        <p id="9b885b9e-2637-4261-972c-8cc7a6f6547c" class="">
-          <code>iptables</code>: Administration tool for IPv4 packet filtering and NAT.
-        </p>
-        <p id="7d1fdb1e-73e2-41c1-be8c-acae0192bfd2" class="">
-          <code>iptables-save</code>: Save current iptables rules to a file.
-        </p>
-        <p id="9b137edb-d3a5-4fb3-8471-29570c9c52d2" class="">
-          <code>iwconfig</code>: Configure a wireless network interface.
-        </p>
-        <p id="166894ea-af95-4088-8ba4-95e4fe9f8e15" class="">
-          <code>jobs</code>: List all background jobs.
-        </p>
-        <p id="449862e1-5d23-4240-8fac-a1a3d2eee9cb" class="">
-          <code>join</code>: Join lines of two files on a common field.
-        </p>
-        <p id="2f3aba2a-c787-47ac-a47d-d390fc1d8539" class="">
-          <code>journalctl</code>: Query the systemd journal or print journal entries.
-        </p>
-        <p id="2f8e7d6d-715b-426e-8aef-a9f7d1d27b5f" class="">
-          <code>jed</code>: A fast, compact editor based on the S-Lang library.
-        </p>
-        <p id="d1715482-9fc5-44a3-a03f-75bf7196bf9d" class="">
-          <code>kill</code>: Terminate processes by name or process ID.
-        </p>
-        <p id="c3ebcdc6-c386-4329-a489-f2c4b216348d" class="">
-          <code>last</code>: Show listing of last logged in users.
-        </p>
-        <p id="54475d98-41e2-41a7-9473-e2c384ca57f6" class="">
-          <code>less</code>: Display files or command output one page at a time.
-        </p>
-        <p id="4770f893-5f19-4d67-9a9d-b2a7005ab7d0" class="">
-          <code>let</code>: Perform arithmetic on shell variables.
-        </p>
-        <p id="5421a3b7-495a-4750-a185-27447f662bab" class="">
-          <code>ln</code>: Create links to files.
-        </p>
-        <p id="7154b942-fe54-48eb-9857-a8a17bc11e2f" class="">
-          <code>look</code>: Display lines beginning with a given string.
-        </p>
-        <p id="65bba40b-eb6e-458a-93b0-198f306a2ff4" class="">
-          <code>ls</code>: List directory contents.
-        </p>
-        <p id="8ae5cd24-87a8-4ac0-a9af-20cec8d1a3c3" class="">
-          <code>lsblk</code>: List block devices.
-        </p>
-        <p id="283aa976-863e-42fd-aa1a-f951e185cfc6" class="">
-          <code>lshw</code>: Display detailed hardware configuration.
-        </p>
-        <p id="f553f78b-8745-4c2b-945f-ab9c9e67291a" class="">
-          <code>lsmod</code>: Show the status of modules in the Linux Kernel.
-        </p>
-        <p id="bd010623-7adc-46f0-8aaa-c6cb43a54271" class="">
-          <code>lsof</code>: List open files.
-        </p>
-        <p id="ad737ed0-3167-451d-b0bd-558ed9afc32d" class="">
-          <code>lsusb</code>: List USB devices.
-        </p>
-        <p id="03c6b704-2592-44f9-b2c8-eff6f35faf93" class="">
-          <code>mailq</code>: Display the mail queue.
-        </p>
-        <p id="93507c86-8f84-4b26-8aad-608163a634f7" class="">
-          <code>man</code>: Display manual pages.
-        </p>
-        <p id="a1a85960-6591-4146-bc6f-ac433dbc8cc2" class="">
-          <code>md5sum</code>: Compute and check MD5 message digest.
-        </p>
-        <p id="03682e06-d6f2-4df0-ac03-11e864cfc7ab" class="">
-          <code>mkdir</code>: Create directories.
-        </p>
-        <p id="848c1c23-3f76-4ad3-9099-edf4e7c9d55d" class="">
-          <code>modinfo</code>: Show information about a kernel module.
-        </p>
-        <p id="02e462a5-a510-42fb-93ac-a7f55cfdac11" class="">
-          <code>more</code>: Display files or command output one page at a time.
-        </p>
-        <p id="56bbf553-cb71-4499-bb53-2aed70456ce6" class="">
-          <code>mount</code>: Mount a file system.
-        </p>
-        <p id="f41b8758-3e1a-4cf7-954c-d58f2918e52e" class="">
-          <code>mpstat</code>: Report processor statistics.
-        </p>
-        <p id="4ecf82a3-9106-469d-a74d-09ca86ea4ffe" class="">
-          <code>mv</code>: Move or rename files.
-        </p>
-        <p id="2a8d8c20-e8da-4c09-9195-3ca6f7dc343a" class="">
-          <code>nc(netcat)</code>: TCP/IP swiss army knife.
-        </p>
-        <p id="d3b65bcd-171b-4fc3-9c32-a3b651a6d948" class="">
-          <code>nmcli</code>: A command-line client for NetworkManager.
-        </p>
-        <p id="29812f55-dbf2-45fe-aafe-92afe515b5d6" class="">
-          <code>nano</code>: Command-line text editor.
-        </p>
-        <p id="3dda80c7-d99f-4d45-b832-017db9f6368b" class="">
-          <code>netstat</code>: Display network connections, routing tables, and more.
-        </p>
-        <p id="ba58793c-d3b6-4a05-aa2e-4920f6283e73" class="">
-          <code>nslookup</code>: Query Internet name servers interactively.
-        </p>
-        <p id="e4f242db-2da3-468c-b8fc-5c328873aa6c" class="">
-          <code>od</code>: Dump files in octal and other formats.
-        </p>
-        <p id="6b6ed45b-2679-4834-8b56-93b6fdd5a8b0" class="">
-          <code>passwd</code>: Change user password.
-        </p>
-        <p id="775dd264-5567-4bda-91eb-df0ae2cc2cb9" class="">
-          <code>paste</code>: Merge lines of files.
-        </p>
-        <p id="7bf881fb-7d3d-4a57-bfd3-fc877039cf3b" class="">
-          <code>pidof</code>: Find the process ID of a running program.
-        </p>
-        <p id="895a2cd0-3544-4283-90dd-140b373a1038" class="">
-          <code>pinky</code>: Lightweight user information utility.
-        </p>
-        <p id="bc55d3ea-7c3a-4996-b51b-d86b41b43fad" class="">
-          <code>pmap</code>: Display memory map of a process.
-        </p>
-        <p id="7230cc91-cef5-41c4-b7bf-edc665b824a9" class="">
-          <code>poweroff</code>: Power off the system.
-        </p>
-        <p id="76b649b9-6028-43b2-a5e4-fe2e456aa197" class="">
-          <code>printf</code>: Format and print data.
-        </p>
-        <p id="68ab2efa-e0b3-4548-b6f5-abd8ac99e654" class="">
-          <code>ps</code>: Report process status.
-        </p>
-        <p id="a424349d-8f08-42aa-af76-65d3150ddac8" class="">
-          <code>pwd</code>: Print current working directory.
-        </p>
-        <p id="a295eabd-cd23-44f5-934b-99aaed2ea2a4" class="">
-          <code>ranlib</code>: Generate index to archive.
-        </p>
-        <p id="db39c231-7bce-4070-b00f-e6ae258bf306" class="">
-          <code>rcp</code>: Copy files between hosts.
-        </p>
-        <p id="7f6a53b9-2d1a-4e59-ace4-bbf08eb8c033" class="">
-          <code>read</code>: Read a line from standard input.
-        </p>
-        <p id="fa62f56a-e68f-4113-b4cd-1024030ed4c0" class="">
-          <code>readelf</code>: Display information about ELF files.
-        </p>
-        <p id="97f4c51b-9b90-4984-a057-0e6e72de48c2" class="">
-          <code>readlink</code>: Print value of a symbolic link.
-        </p>
-        <p id="d366b64a-53db-42db-9bd6-edd3a29d3035" class="">
-          <code>reboot</code>: Reboot the system.
-        </p>
-        <p id="cc9c98a8-745f-4576-937e-b091be56394c" class="">
-          <code>rename</code>: Rename files.
-        </p>
-        <p id="fdf741c5-f216-49e4-b0b4-1d73244397e4" class="">
-          <code>reset</code>: Reset the terminal.
-        </p>
-        <p id="5cf9b499-5a37-40b1-a001-3ac2dfe3cfd7" class="">
-          <code>restore</code>: Restore a file system from a backup.
-        </p>
-        <p id="465cf4cf-19f2-4d0d-8ce3-3045b6e680e2" class="">
-          <code>return</code>: Exit a function.
-        </p>
-        <p id="a38b6985-47fc-4aed-ad3d-802664f558da" class="">
-          <code>rev</code>: Reverse lines of a file.
-        </p>
-        <p id="5b0f23e0-9f24-439c-b3c9-8ecc87928159" class="">
-          <code>rmdir</code>: Remove directories.
-        </p>
-        <p id="06e90a87-c0fd-4791-ae8d-901fc8f22558" class="">
-          <code>rm</code>: Remove files or directories.
-        </p>
-        <p id="d5397575-5450-4f98-895f-a4936b3d39c0" class="">
-          <code>rmmod</code>: Remove a module from the Linux Kernel.
-        </p>
-        <p id="b54adc06-0040-4de0-9945-890a075aad5e" class="">
-          <code>route</code>: Show/manipulate the IP routing table.
-        </p>
-        <p id="27855e04-5b68-4741-86ce-4b7cf40c0283" class="">
-          <code>rsync</code>: Remote file synchronization utility.
-        </p>
-        <p id="6c2d0a7b-a31a-445f-98c9-ec9133763e12" class="">
-          <code>sar</code>: System activity reporter.
-        </p>
-        <p id="a9e3ade2-a1df-4ab4-b02f-b87038811d4f" class="">
-          <code>scp</code>: Secure copy files between hosts.
-        </p>
-        <p id="7cd762b3-f616-4003-932a-c088bebae776" class="">
-          <code>screen</code>: Full-screen window manager.
-        </p>
-        <p id="99a9fe99-8bec-416b-b02e-de6a379fc3ea" class="">
-          <code>script</code>: Record a terminal session.
-        </p>
-        <p id="481646af-339c-46a6-a4c8-4bec977efbad" class="">
-          <code>scriptreply</code>: Play back typescripts, using timing information.
-        </p>
-        <p id="05487588-9fb2-4001-998e-a7caaa32777a" class="">
-          <code>sdiff</code>: Merge two files interactively.
-        </p>
-        <p id="fb6b7fc6-a201-42f9-8d72-cfe37c805a3a" class="">
-          <code>sed</code>: Stream editor for filtering and transforming text.
-        </p>
-        <p id="e10b6866-49b1-46be-b0a0-ab1e81f15cf6" class="">
-          <code>select</code>: Accept keyboard input.
-        </p>
-        <p id="e80a883d-f7cc-4d48-9943-55beade074b8" class="">
-          <code>seq</code>: Print sequences of numbers.
-        </p>
-        <p id="04789138-b114-4b2c-8e36-a741c15e2765" class="">
-          <code>setsid</code>: Run a program in a new session.
-        </p>
-        <p id="21cfd651-20c3-45c0-a561-52fa615a53cb" class="">
-          <code>shift</code>: Shift positional parameters in a script.
-        </p>
-        <p id="4e4b28eb-69bc-44a6-b0ab-c82b98700e5a" class="">
-          <code>showkey</code>: Display key codes.
-        </p>
-        <p id="b5e9f8d9-fb58-4a2e-8a67-f78098e92248" class="">
-          <code>shred</code>: Securely delete files.
-        </p>
-        <p id="2e855608-15b3-449d-8160-75d82526dab1" class="">
-          <code>shutdown</code>: Shut down the system.
-        </p>
-        <p id="ea267d9b-a622-4236-bf4f-f50fd3d53532" class="">
-          <code>sleep</code>: Delay for a specified amount of time.
-        </p>
-        <p id="b5f3b0d0-966c-426f-83e9-d0498e99331f" class="">
-          <code>sort</code>: Sort lines of text files.
-        </p>
-        <p id="5589cd63-b1c4-42e8-8d54-710a5de12ff7" class="">
-          <code>source</code>: Run commands from a file.
-        </p>
-        <p id="92ae3518-4beb-4ad6-aef0-48e973d6e5a1" class="">
-          <code>split</code>: Split a file into pieces.
-        </p>
-        <p id="37d5714a-60b1-4e54-b105-db5c4140aa6a" class="">
-          <code>ssh</code>: Secure shell client.
-        </p>
-        <p id="9ee3d61f-126c-417f-9028-f90964568b01" class="">
-          <code>strace</code>: Trace system calls and signals.
-        </p>
-        <p id="bbb4b508-e1b2-41c3-b732-ceab1ae82dbf" class="">
-          <code>stty</code>: Set terminal options.
-        </p>
-        <p id="2a734d0c-d837-4e02-b9f7-b4be3f5ead6f" class="">
-          <code>sum</code>: Print checksum and block counts for a file.
-        </p>
-        <p id="bcd5e429-5ed2-49cc-a7c7-859392bec020" class="">
-          <code>sync</code>: Synchronize data on disk with memory.
-        </p>
-        <p id="a9cc52be-5067-4ca2-b996-110045673e23" class="">
-          <code>systemctl</code>: Control the systemd system and service manager.
-        </p>
-        <p id="1693fbb5-f6a9-4bde-9f65-61751d13059c" class="">
-          <code>tac</code>: Concatenate and print files in reverse.
-        </p>
-        <p id="2cca28c4-2171-4c8f-b342-4b847fc62b92" class="">
-          <code>tail</code>: Output the last part of files.
-        </p>
-        <p id="a92edf66-9119-4f75-9a47-117b48bfe0dd" class="">
-          <code>tar</code>: Tape archive utility.
-        </p>
-        <p id="804a9a42-386b-4b5f-8d50-290059d52292" class="">
-          <code>tee</code>: Redirect output to multiple files.
-        </p>
-        <p id="78b80422-0de1-4c1d-91ea-62b215fa46a1" class="">
-          <code>time</code>: Time a simple command or give resource usage.
-        </p>
-        <p id="7a01e762-6371-444b-b0be-77575e719510" class="">
-          <code>top</code>: Display and update sorted information about processes.
-        </p>
-        <p id="fbb25cec-b4a3-4448-ad3b-ffe388fe9b4c" class="">
-          <code>touch</code>: Change file timestamps.
-        </p>
-        <p id="6a4d48f8-29ca-4cf4-a70a-cef90fb42d2a" class="">
-          <code>traceroute</code>: Print the route packets trace to network host.
-        </p>
-        <p id="3caaa21a-cca7-45d9-b170-32f1ca5c2a1a" class="">
-          <code>tr</code>: Translate or delete characters.
-        </p>
-        <p id="b63b5b29-a52e-4d28-b734-13bbe545f291" class="">
-          <code>tracepath</code>: Trace path to a network host.
-        </p>
-        <p id="da6f2d61-34f4-4eef-9046-d3e6a71021fe" class="">
-          <code>tree</code>: List contents of directories in a tree-like format.
-        </p>
-        <p id="1903f376-f766-4e90-ae2f-5a6ae0da4161" class="">
-          <code>tty</code>: Print the file name of the terminal connected to standard input.
-        </p>
-        <p id="08876af5-9c84-4a06-90d8-737d5f0137e9" class="">
-          <code>type</code>: Indicate how a command name is interpreted.
-        </p>
-        <p id="5a37c6a5-5cbc-49ba-a055-577a2ae11ab7" class="">
-          <code>uname</code>: Print system information.
-        </p>
-        <p id="17310f6f-527f-4185-b068-7668278b38f1" class="">
-          <code>unalias</code>: Remove alias definitions.
-        </p>
-        <p id="92f8c038-b924-4d02-acc7-568df7934482" class="">
-          <code>unexpand</code>: Convert spaces to tabs.
-        </p>
-        <p id="e188a501-fb23-40e7-a080-8663a669918c" class="">
-          <code>uniq</code>: Filter adjacent matching lines from input.
-        </p>
-        <p id="c0e06e69-8c46-49c5-b4c1-71a5b36ca5c2" class="">
-          <code>unix2dos</code>: Convert text file format from Unix to DOS.
-        </p>
-        <p id="e3a716a1-5a37-4d6d-89d1-3a5281036603" class="">
-          <code>until</code>: Execute commands as long as a condition is false.
-        </p>
-        <p id="bc6c6224-e51a-45c3-b3d5-a081d25785d4" class="">
-          <code>uptime</code>: Show how long the system has been running.
-        </p>
-        <p id="4f0c38b0-7e71-4df0-b0de-1965e123088e" class="">
-          <code>username</code>: Print effective user ID.
-        </p>
-        <p id="8a681b25-e7f4-4df7-9ffa-626c5c9e138b" class="">
-          <code>useradd</code>: Create a new user or update default new user information.
-        </p>
-        <p id="e87b0caa-b542-47af-ae45-4eb070add394" class="">
-          <code>userdel</code>: Delete a user account and related files.
-        </p>
-        <p id="6e9c1bc0-6d35-447b-895f-b9f719b02be1" class="">
-          <code>usermod</code>: Modify a user account.
-        </p>
-        <p id="2be03da7-abe3-471c-a1a2-15e0c5ff8171" class="">
-          <code>users</code>: List users currently logged in.
-        </p>
-        <p id="ef44c16a-2517-4a75-bdb3-d193322b0527" class="">
-          <code>vi</code>: Text editor for Unix systems.
-        </p>
-        <p id="ff60268c-568c-4b12-b755-5e9eaffae2db" class="">
-          <code>vmstat</code>: Report virtual memory statistics.
-        </p>
-        <p id="ec3f4d7a-b69c-4382-86eb-e3b808ef119b" class="">
-          <code>vnstat</code>: Network traffic monitoring tool.
-        </p>
-        <p id="6ff3ae7b-16df-48c1-9ca3-df703fc53c5d" class="">
-          <code>w</code>: Show who is logged on and what they are doing.
-        </p>
-        <p id="3b7d7717-dc4d-49d3-ab02-9f7032864003" class="">
-          <code>wall</code>: Write a message to all users.
-        </p>
-        <p id="e10015cd-f629-4b89-86e8-b5eee3378830" class="">
-          <code>watch</code>: Execute a program periodically, showing output.
-        </p>
-        <p id="f0501a30-555c-4dfb-a3b7-2bae604092fd" class="">
-          <code>wc</code>: Print newline, word, and byte counts for each file.
-        </p>
-        <p id="168cfcd4-c2c1-4350-8464-a14d0471daba" class="">
-          <code>wget</code>: Retrieve files from the web.
-        </p>
-        <p id="825bc761-6180-4a5e-9434-102153fce5c0" class="">
-          <code>whatis</code>: Display a one-line description for a command.
-        </p>
-        <p id="7c20e3ef-e412-4833-a59e-c2691fcad1f1" class="">
-          <code>which</code>: Locate a command.
-        </p>
-        <p id="badd2622-8ca3-4721-9ccb-dbd624d3b16c" class="">
-          <code>while</code>: Execute commands repeatedly as long as a condition is true.
-        </p>
-        <p id="fe7ff301-d409-4aa2-9c51-8549745af4f9" class="">
-          <code>who</code>: Show who is logged on.
-        </p>
-        <p id="c79fb04e-7868-465d-b87e-a25ca929c5db" class="">
-          <code>whoami</code>: Print effective user ID.
-        </p>
-        <p id="9b1f5fa1-725e-4975-a441-6007afccfdc2" class="">
-          <code>write</code>: Send a message to another user.
-        </p>
-        <p id="0c3ecbbb-17b6-4c8c-90db-3b4725236930" class="">
-          <code>xargs</code>: Build and execute command lines from standard input.
-        </p>
-        <p id="cd0d9f5d-2f41-4631-a275-c61e7ac087c2" class="">
-          <code>xdg-open</code>: Open a file or URL using the preferred application.
-        </p>
-        <p id="9b7269d5-787d-4d2c-aa20-ac72627b1ca4" class="">
-          <code>yes</code>: Output a string repeatedly until killed.
-        </p>
-        <p id="7c99799d-c1cd-49a1-b30e-248c91bc05c0" class="">
-          <code>zip</code>: Package and compress files into a zip archive.
-        </p>
-        <p id="fca369bc-b524-4853-a63d-a0ca97551f42" class="">
-          <code>zdiff</code>: Compare compressed files.
-        </p>
-        <p id="2c929b53-8b5e-473d-94fe-95e4d28f4a70" class="">
-          <code>zdump</code>: Time zone dumper.
-        </p>
-        <p id="b35dc363-223d-49a9-83f2-3650dbff74b8" class="">
-          <code>zgrep</code>: Search compressed files for a regular expression.
-        </p>
-        <p id="3fce9e3b-71fb-4076-8a45-c4c5787614db" class=""></p>
-        <p id="4eb92d09-cf53-4ff7-8146-738581115cab" class=""></p>
-        <blockquote id="39f95f86-9043-4617-aada-0456ab79db13" class="">Spy404 | <a href="https://github.com/spy404">My Github</a> | <a href="https://spy404.github.io"> My Portfolio</a> | <a href="https://gitlab.com/spy404"> My gitlab</a>
-        </blockquote>
-      </div>
-    </article>
-    <span class="sans" style="font-size:14px;padding-top:2em"></span>
-  </body>
-</html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Linux Commands</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="0a4333b6-e4ab-4ae6-aa10-d3fb282105ea" class="page sans"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/nasa_earth_grid.jpg" style="object-position:center 30.000000000000004%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">🐧</span></div><h1 class="page-title">Linux Commands</h1><p class="page-description"></p></header><div class="page-body"><p id="8bd4de6a-03fd-41ae-85ff-1de8a7c9c368" class="">
+</p><p id="7b69e829-37db-441d-841d-886ccea57b3a" class=""><code>access</code>:  Verifies user permissions for accessing files.</p><p id="d30b9b56-b768-414e-b080-6007b4dfbb5b" class=""><code>accton</code>:  Controls process accounting activation.</p><p id="ab55466e-cff1-445e-9802-11e39ae540fe" class=""><code>aclocal</code>: Creates <code>aclocal.m4</code> from <code>aclocal.m4.in</code>.</p><p id="e3dc50a9-8d7d-49e4-8f4d-09aa26c0db84" class=""><code>acpi</code>: Retrieves information on ACPI devices.</p><p id="edb807c4-729c-4149-85db-4bfc583465f0" class=""><code>acpi_available</code>: Checks system&#x27;s ACPI availability.</p><p id="09af689f-51ac-4a19-9456-0327e63eebf9" class=""><code>acpid</code>: Manages ACPI events on the system.</p><p id="755e2641-150a-42a1-8b7a-d4bd632ecdf7" class=""><code>addr2line</code>: Resolves addresses to file names and line numbers.</p><p id="7c48d130-b1f7-445f-a7b8-cb681794c3f8" class=""><code>agetty</code>: Manages physical or virtual terminals.</p><p id="b9fe710a-7570-415f-b047-7420b7c7c315" class=""><code>alias</code>: Sets up command aliases.</p><p id="1d0bca1f-cb51-4529-beb9-f0db6436decc" class=""><code>amixer</code>: Adjusts audio mixer settings.</p><p id="92a3e47b-fcec-4ec7-8ef0-bf4dd59f88c2" class=""><code>aplay</code>: Plays audio files using ALSA.</p><p id="72b9a003-83da-4cef-a73f-45926a09a755" class=""><code>aplaymidi</code>: Plays MIDI files.</p><p id="82d8e993-b32e-490a-86a0-0786d5c7bb7a" class=""><code>apropos</code>: Searches manual page descriptions for keywords.</p><p id="df9b8cb2-7642-4e6c-ad18-e36324ee1cc9" class=""><code>apt</code>: High-level package management tool.</p><p id="8a47de06-1718-47f8-95e2-c3e98d8eeb8e" class=""><code>apt-get</code>: Command-line package manager for Debian-based systems.</p><p id="67231bfa-f7e7-46cf-ad99-824574b9a75d" class=""><code>aptitude</code>: Text-based package manager.</p><p id="c6e04fa5-5545-42b8-840a-394aae6a8424" class=""><code>ar</code>: Creates, modifies, or extracts from archives.</p><p id="29fcf23d-b29a-4d63-ac60-3f1dace710b7" class=""><code>arch</code>: Displays machine hardware name.</p><p id="c0ecc854-5794-473d-965e-b6391f323c7a" class=""><code>arp</code>: Manages ARP cache.</p><p id="04f53181-2c11-46dd-9e3d-8882278910c8" class=""><code>aspell</code>: Interactive spell checker.</p><p id="f4eee4d2-e540-47e1-9db7-03ab0b8382c5" class=""><code>atd</code>: Executes scheduled commands.</p><p id="4be68d03-576f-4337-8b67-9d2acde9b3db" class=""><code>atq</code>: Lists pending jobs.</p><p id="c4fe5fc5-7680-4169-a479-5a398d98feb4" class=""><code>atrm</code>: Removes jobs from the at queue.</p><p id="c947c73c-9b0e-48c2-9e22-2c37b3d6b55a" class=""><code>autoconf</code>: Configures software source code packages.</p><p id="742382d9-232e-467d-8ade-420cecfd04eb" class=""><code>autoheader</code>: Generates a header file template.</p><p id="f897691d-4623-4449-94f2-92527d847101" class=""><code>automake</code>: Creates <code><a href="http://makefile.in/">M</a></code><code>akefile.in</code> from <code>Makefile.am</code>.</p><p id="a6d74b07-42ee-4c34-a510-7954f781836a" class=""><code>autoreconf</code>:  Updates configure scripts.</p><p id="ecfcbb9a-5601-48d8-974c-3eb322efb815" class=""><code>autoupdate</code>: Updates <code>configure.in</code> from macros.</p><p id="f4259bed-2481-4466-9f3f-b038bb9ad459" class=""><code>awk</code>: A powerful text processing and pattern matching tool.</p><p id="0a105c57-d3bb-4d75-9c99-b6ea7daf5752" class=""><code>banner</code>: Prints characters in large size.</p><p id="5d363d4b-895b-4c3b-9119-b37e85bfe249" class=""><code>basename</code>: Strips directory and suffix from filenames.</p><p id="ba7d9d31-a11b-409e-8796-1ff6f5dfbbee" class=""><code>batch</code>: Executes commands based on system load levels.</p><p id="3829a430-7a47-4799-b897-2509e6715335" class=""><code>bc</code>: Arbitrary-precision calculator language.</p><p id="a7f45159-75fb-4b66-b9a6-051e656b7f32" class=""><code>bg</code>: Resumes suspended jobs in the background.</p><p id="b3d84b84-a299-462e-b194-c71d853e3039" class=""><code>biff</code>: Notifies users of mail messages.</p><p id="450880d7-4160-4674-a04f-7999b4ba9e7b" class=""><code>bind</code>: Binds a name to a socket.</p><p id="613dcb14-e7b9-4cfe-8526-f94283381ddb" class=""><code>bison</code>: Parser generator for syntax analysis.</p><p id="3c40b2ac-cbb6-4926-924a-2e1f5ff839f0" class=""><code>break</code>: Exits a loop.</p><p id="b76db605-aa55-4e39-8744-fbf2e3cf928c" class=""><code>builtin</code>: Runs a built-in shell command.</p><p id="da5dd0be-b6a6-48e5-b5d7-071be073133c" class=""><code>bzcmp</code>: Compares bzip2 compressed files.</p><p id="076746a9-bc17-4b31-8882-82cea85fedba" class=""><code>bzdiff</code>: Compares bzip2 compressed files.</p><p id="28597cb3-08b3-44fb-9157-626c6accce14" class=""><code>bzgrep</code>: Searches patterns in bzip2 compressed files.</p><p id="f9d1b9ea-29ce-47f7-9b20-8e07555570f8" class=""><code>bzip2</code>: Compresses or decompresses files using the bzip2 algorithm.</p><p id="c08f6654-fe12-4e6d-8296-6dce85ecdb9f" class=""><code>bzless</code>: Views bzip2-compressed files.</p><p id="fd5948d2-e055-4d53-ae79-1d0f5841b1fa" class=""><code>bzmore</code>: Views bzip2-compressed files.</p><p id="90017508-9ae3-4829-a396-0e99b2cf13cb" class=""><code>cal</code>: Displays a calendar.</p><p id="2077d3a1-03e7-47a7-aacf-ab8380de5075" class=""><code>case</code>: Executes commands based on pattern matching.</p><p id="1209857f-c104-4ead-80e5-0cc38db68da2" class=""><code>cat</code>: Concatenates and displays files.</p><p id="7f1cd5a6-cb88-417c-85aa-d641e0fb7cd4" class=""><code>cc</code>: C compiler.</p><p id="c01c40c8-4246-4a6f-bce0-ce1b2e9e0993" class=""><code>ccrypt</code>: Encrypts and decrypts files.</p><p id="ca45f203-319a-422e-928c-f63da1933416" class=""><code>cd</code>: Changes the current directory.</p><p id="17f5a94e-10f3-4251-94f6-129d2d92657f" class=""><code>cfdisk</code>: Displays or manipulates disk partition tables.</p><p id="927c083e-f252-4a07-9bf7-7d567bfc0372" class=""><code>chage</code>: Modifies user password expiry information.</p><p id="eb3c2ca5-78fa-49be-ad58-e68b73df5473" class=""><code>chattr</code>: Changes file attributes on a Linux file system.</p><p id="18561530-9ae3-40e9-8107-a4133047a028" class=""><code>chfn</code>: Modifies user information.</p><p id="e99efd70-cf68-482b-be23-bd0a2cc5084a" class=""><code>chgrp</code>: Changes group ownership of files.</p><p id="ca6d26c9-1246-443a-bfd8-bf02d33af4f8" class=""><code>chmod</code>: Changes file mode bits.</p><p id="4e9be3ba-3ade-4fe9-be59-f63b39b755a4" class=""><code>chown</code>: Changes file owner and group.</p><p id="f5c816ad-dc2a-4417-9a7f-9f5d5f586e63" class=""><code>chpassw</code>: Modifies user password.</p><p id="28b1b04a-e13b-4c36-82f9-bbba8fcc2f48" class=""><code>chroot</code>: Changes the root directory for a command.</p><p id="166e6931-6357-47c7-9419-20e7237c83a7" class=""><code>chrt</code>: Modifies real-time attributes of a process.</p><p id="5e1a609a-746a-4624-b4f7-b0e50499be6e" class=""><code>chsh</code>: Changes the login shell for a user.</p><p id="a7f801b9-8084-4a96-b17a-a66ab9bdd91e" class=""><code>chvt</code>: Change to a different virtual terminal.</p><p id="1da091d7-2fb5-4615-8ff5-4be8775dbd85" class=""><code>cksum</code>: Calculate and display the checksum and byte count of a file.</p><p id="3c12b0e1-6cff-4236-853c-e8487cbf27c8" class=""><code>clear</code>: Clear the terminal screen.</p><p id="88fd1073-c479-4af7-ba82-b1bca131ef98" class=""><code>cmp</code>: Compare two files byte by byte.</p><p id="797aba81-3092-4742-a2c9-8acd1bfd0e75" class=""><code>col</code>: Filter reverse line feeds.</p><p id="cbc729ba-af4f-4629-b2b6-88479b35a703" class=""><code>colcrt</code>: Filter nroff output for CRT previewing.</p><p id="ca822c85-1776-4bd7-8cbe-e977b6fa01ba" class=""><code>colrm</code>: Remove columns from a file.</p><p id="3dedc791-0252-40c7-be5a-6429f5bf140d" class=""><code>column</code>: Columnate lists.</p><p id="1ca1c8c6-0245-4438-b796-7fcb31211838" class=""><code>comm</code>: Compare two sorted files line by line.</p><p id="872ec4c5-6575-47f9-82b6-850e85099db6" class=""><code>compress</code>: Compress files using Lempel-Ziv coding.</p><p id="ca871afb-a67c-4e09-b560-a5f6f6c7fec1" class=""><code>continue</code>: Resume the next iteration of a loop.</p><p id="e0109c4a-80eb-4297-b600-8a6e12bdc2a2" class=""><code>cp</code>: Copy files and directories.</p><p id="8b7d885a-0b6c-4d0e-b9a9-a18b47ac13e5" class=""><code>cpio</code>: Copy files to and from archives.</p><p id="2e6f792d-5a7c-499f-9567-4822c3fb70aa" class=""><code>cpp</code>: The C Preprocessor.</p><p id="1ea66a68-8afc-4634-a7ce-7c4b7b5b89f8" class=""><code>cron</code>: Daemon to execute scheduled commands.</p><p id="ca4f09f2-1bbb-4fb6-a415-446ac0f34ff2" class=""><code>crontab</code>: Schedule a command to run at a later time.</p><p id="45f87048-565a-40e8-8596-1d32374bee95" class=""><code>csplit</code>: Split a file into context-determined pieces.</p><p id="ea1a8808-b9d3-49a9-b6ee-ea769cfba1e9" class=""><code>ctags</code>: Create a tags file.</p><p id="db5ac398-8c4e-4b8d-85ac-b6db71fe14e5" class=""><code>cupsd</code>: Common UNIX Printing System daemon.</p><p id="ce98957b-5399-4298-acca-c219d620c95b" class=""><code>curl</code>: Transfer data from or to a server.</p><p id="9850b9c5-89c4-4a1c-839c-e255c7aea67a" class=""><code>cut</code>: Remove sections from each line of files.</p><p id="aae4f81e-cfeb-487b-b82e-de649b3c7f15" class=""><code>cvs</code>: Concurrent Versions System.</p><p id="76c05e8b-1cf2-495d-82ef-3d2c397a65ef" class=""><code>date</code>: Display or set the system date and time.</p><p id="2a0f8c29-54d6-44f9-ab4d-15621fb80eca" class=""><code>dc</code>: Desk Calculator.</p><p id="3e76f28d-718f-4338-969a-8f407d91f00a" class=""><code>dd</code>: Convert and copy a file.</p><p id="842cd932-898c-4664-b253-c69e294547ed" class=""><code>declare</code>: Declare variables and give them attributes.</p><p id="fe73bbd5-d6a1-
+494e-9a54-7ffb593a9c14" class=""><code>depmod</code>: Generate <code>modules.dep</code> and map files.</p><p id="c10e8a83-f921-4cbf-bc02-5dc00992ec9c" class=""><code>df</code>: Report file system disk space usage.</p><p id="eb7a0528-d9fe-47b3-8c82-2d88efa3777c" class=""><code>diff</code>: Compare files line by line.</p><p id="4e1da048-fa44-440d-9132-4730526bc587" class=""><code>diff3</code>: Show differences among three files.</p><p id="f612ddb4-beb4-4025-97a4-d157c0d4c89d" class=""><code>dig</code>: DNS lookup utility.</p><p id="d6c3ac04-f93c-48f4-8eae-d59ce46c5986" class=""><code>dir</code>: List directory contents.</p><p id="7c873688-ce61-4364-9486-910cf5d80b27" class=""><code>dirname</code>: Convert a full pathname to just a path.</p><p id="c0b890aa-4bc0-4284-a7b9-87584f268ef3" class=""><code>dirs</code>: Display list of remembered directories.</p><p id="10b73ef4-0991-4399-8fd0-f67934ab9155" class=""><code>disable</code>: Disable a shell builtin.</p><p id="7641be05-29cc-4fdf-acc2-142655186b41" class=""><code>dmesg</code>: Print or control the kernel ring buffer.</p><p id="965dad01-6616-4ed2-8bd4-7939dfdf53f7" class=""><code>dmidecode</code>: DMI table decoder.</p><p id="1d524df4-8466-48bd-b9d8-03225801e741" class=""><code>domainname</code>: Show or set the system’s NIS/YP domain name.</p><p id="ffcff9e7-910e-47d2-897f-c33885fbec07" class=""><code>dos2unix</code>: Convert text file format.</p><p id="76b22fe0-197e-42e4-abfb-1c774562ebe5" class=""><code>dosfsck</code>: Check and repair MS-DOS file systems.</p><p id="d2494d28-f9e3-4363-9bcf-06c7743ddc9c" class=""><code>dstat</code>: Versatile resource statistics tool.</p><p id="992404a8-1814-4d8e-a9f1-1bda012cf1aa" class=""><code>du</code>: Estimate file space usage.</p><p id="924e7bd7-4f7e-45f5-b6df-dae8474ca986" class=""><code>dump</code>: Dump file systems.</p><p id="ecb05dec-8eff-44e6-a579-56e675d6844a" class=""><code>dumpe2fs</code>: Dump ext2/ext3/ext4 filesystem information.</p><p id="fb4b01ce-1d52-4e3f-b3ac-484f1264a005" class=""><code>dumpkeys</code>: Dump keyboard translation tables.</p><p id="f30206ff-f65c-44d1-b365-f4c3e2dad9cd" class=""><code>ed</code>: The standard text editor.</p><p id="ef586c6b-4f62-49a6-b80d-d2fb37ddcb85" class=""><code>echo</code>: Display a line of text.</p><p id="1efd2e0a-3465-4569-951c-e4c0be593a10" class=""><code>egrep</code>: Search files for lines matching a pattern.</p><p id="b7994875-53bd-4971-aa11-df4debd6c60e" class=""><code>eject</code>: Eject removable media.</p><p id="8247e21a-a731-4f34-9168-73150fd209b7" class=""><code>emacs</code>: The extensible, customizable, self-documenting real-time display editor.</p><p id="a3c19bbf-cb20-4cad-b532-8beb2c895c7f" class=""><code>enable</code>: Enable and disable builtin shell commands.</p><p id="af96eafe-d5cc-48cb-b0d9-1c76146f6446" class=""><code>env</code>: Display, set, or remove environment variables.</p><p id="e1356fca-1e0b-4146-b11c-b38520d52c1f" class=""><code>eval</code>: Evaluate several commands or arguments.</p><p id="0db06c5a-4249-4f51-bde9-a01e635b43d7" class=""><code>ex</code>: Line editor.</p><p id="3e668ad7-b7f4-4a10-b5b0-48ab703515ac" class=""><code>exec</code>: Execute a command.</p><p id="931d4f6d-ee98-4714-8401-44c20d58ba80" class=""><code>exit</code>: Exit the shell.</p><p id="c8632320-1f90-412d-9fd8-c6c0edf70ca6" class=""><code>expand</code>: Convert tabs to spaces.</p><p id="89b53130-0df2-455f-97ca-e47d7e10fa70" class=""><code>expect</code>: Programmed dialogue with interactive programs.</p><p id="6ebc2dd9-254e-4edf-9928-8ddcf0e7dfc4" class=""><code>export</code>: Set an environment variable.</p><p id="12432034-7d58-499e-b580-09f7a3c16d4f" class=""><code>expr</code>: Evaluate expressions.</p><p id="4b10ecac-f838-4d27-ad20-65b19c25f382" class=""><code>factor</code>: Print prime factors.</p><p id="b461debf-c213-4800-86be-3ddd9f5b2f72" class=""><code>fc</code>: Fix command.</p><p id="6d69ba99-2a85-4a97-b2d7-81f7d2e14191" class=""><code>fc-cache</code>: Build font information cache files.</p><p id="171a7d76-7857-42e2-b070-867c43eaa905" class=""><code>fc-list</code>: List available fonts.</p><p id="a53dabea-ab27-43e6-9733-518f12a144bc" class=""><code>fdisk</code>: Partition table manipulator.</p><p id="9c6327bc-d92b-4130-8d80-d3cc884a443f" class=""><code>fg</code>: Send job to foreground.</p><p id="9fb88d23-aaec-4dbc-9ff4-012aa72a1e3d" class=""><code>fgrep</code>: Search files for fixed strings.</p><p id="4e0eaf21-88d3-4cc4-a2dc-c75747e02152" class=""><code>file</code>: Determine file type.</p><p id="94c61aa9-7811-48a2-95aa-c338c1918ec5" class=""><code>finger</code>: User information lookup program.</p><p id="ba42a47e-a30f-4f88-88ad-fafd3b10e504" class=""><code>fmt</code>: Reformat paragraph text.</p><p id="11500c7e-750c-4b6a-b501-0351370755b8" class=""><code>fold</code>: Wrap each input line to fit in specified width.</p><p id="7b247780-7841-4b58-b55a-ea25c2656285" class=""><code>for</code>: Expand words and execute commands.</p><p id="b65a484b-c6af-4c2d-b5e5-3f353bf090b2" class=""><code>free</code>: Display amount of free and used memory in the system.</p><p id="b110d228-ac62-4bb5-885e-ce01d22e03bd" class=""><code>function</code>: Define Function Macros.</p><p id="f50d9746-9fd8-4f98-aa96-11df68fb6fdc" class=""><code>g++</code>: GNU project C and C++ compiler.</p><p id="4f9e37e9-fdc4-445c-849a-12c454bb706a" class=""><code>gawk</code>: Find and Replace text within file(s).</p><p id="5fbe5ed1-38b7-4ccf-bc8b-f25ac9f37b95" class=""><code>gcc</code>: GNU project C and C++ compiler.</p><p id="7500a708-ec2e-4044-be9f-7b492213bbc2" class=""><code>gdb</code>: The GNU Debugger.</p><p id="634565de-260b-41cf-ba2d-c46ccf6b9e62" class=""><code>getent</code>: Get entries from administrative database.</p><p id="3a598b1f-b134-47ce-a4de-54bb39a45300" class=""><code>grep</code>: Search file(s) for lines matching a pattern.</p><p id="09babb8d-0c3f-4821-985d-7ea166e7b3de" class=""><code>gpassw</code>: Modify a group password.</p><p id="49d40c12-e8e5-4d8a-bbc1-77a505560391" class=""><code>groupadd</code>: Create a new group.</p><p id="03fe4505-a460-4925-b29f-8376d1d62983" class=""><code>groupdel</code>: Delete a group.</p><p id="039f371a-65cd-41f0-a9cd-e48c324a883a" class=""><code>groupmod</code>: Modify a group definition.</p><p id="36336f7f-9fd0-4e1c-8745-57d3e651ff33" class=""><code>groups</code>: Print group names a user is in.</p><p id="9bf7b099-0ef5-4169-94c9-80a4041b457c" class=""><code>grpck</code>: Verify integrity of group files.</p><p id="fb63d48c-58d4-4335-a145-64c372d9f3e9" class=""><code>grpconv</code>: Convert between textual and hashed group files.</p><p id="d9dc0b74-554d-49d0-8d3e-ad5c0dbdf8c0" class=""><code>gs</code>: Ghostscript (PostScript and PDF viewer).</p><p id="e9289e36-9523-4bbf-9635-120770b753c6" class=""><code>gunzip</code>: Decompress files compressed with gzip.</p><p id="8f7a093b-5274-4b68-8c45-11ee3a44fa24" class=""><code>gzexe</code>: Compress executable files in place.</p><p id="d4fade38-43cb-432b-9ee3-7f75ab3c8829" class=""><code>gzip</code>: Compress or decompress files.</p><p id="bbced450-941f-46e2-9533-0b87209e5a36" class=""><code>halt</code>: Stop the system.</p><p id="97a114f3-4a95-4c4c-bd73-47d7cae366b8" class=""><code>hash</code>: Remember the full pathname of a name argument.</p><p id="6cf2b205-365d-4505-8c3c-ab4ea9c3f036" class=""><code>hdparm</code>: Get/set hard disk parameters.</p><p id="791a9156-a63b-4441-9bc3-d562337e4d29" class=""><code>head</code>: Output the first part of files.</p><p id="0f60dfcb-125c-47dd-a8ab-bd182438cdd8" class=""><code>help</code>: Display help for a built-in command.</p><p id="e056e535-1e4b-4355-bdbe-bc3843eb1879" class=""><code>hexdump</code>: Display file contents in hexadecimal, decimal, octal, or ASCII.</p><p id="7c128261-207a-40b6-8841-2d841a36320b" class=""><code>history</code>: Command history for the current session.</p><p id="392bfa3d-bf9c-4fb4-9bd1-4fe4770c0b89" class=""><code>host</code>: DNS lookup utility.</p><p id="2755b450-388b-42a5-a295-02ce8ed8ce45" class=""><code>hostid</code>: Print numeric host identifier.</p><p id="8353af54-1c21-424a-ac44-224a0af166bf" class=""><code>hostname</code>: Print or set system name.</p><p id="964cc5f8-a6a5-4281-969a-1547a5eb176e" class=""><code>hostnamectl</code>: Control system hostname.</p><p id="9f033fda-84e6-469d-804e-a4d126680df8" class=""><code>htop</code>: Interactive process viewer.</p><p id="bdf4c708-2b06-4b3e-8358-22e205c0789c" class=""><code>hwclock</code>: Query and set the hardware clock (RTC).</p><p id="7026750b-2ba0-430b-b8cf-10178ee6c999" class=""><code>iconv</code>: Convert text from one character encoding to another.</p><p id="cadf76d9-5f70-4a4e-912f-82b0aaa50c65" class=""><code>id</code>: Print user identity.</p><p id="41d27af1-4d05-44fb-927f-18eda4e3dd20" class=""><code>if</code>: Conditionally perform a command.</p><p id="75d2f5b8-6e55-4e3e-b417-0d0e88dcfa1d" class=""><code>ifconfig</code>: Configure a network interface.</p><p id="0c6bc33a-5914-435d-a565-4dc5c958a13d" class=""><code>iftop</code>: Display bandwidth usage on an interface.</p><p id="78df789b-df69-4dae-8b3a-f063ccf13782" class=""><code>ifup</code>: Bring a network interface up.</p><p id="c268ac61-a3ef-4def-b2d5-a4dd162a779a" class=""><code>import</code>: Capture and save a screenshot.</p><p id="e3dbfa28-59b2-40e2-897c-34c3869a61b1" class=""><code>info</code>: Help information for commands.</p><p id="657e1b12-381c-4600-875d-62405594f135" class=""><code>insmod</code>: Insert a module into the Linux kernel.</p><p id="b9486afa-0ebe-4b7a-95dc-5180ff439e0d" class=""><code>install</code>: Copy files and set attributes.</p><p id="0c1b31d0-7792-473a-87bf-4235c3df5a47" class=""><code>iostat</code>: Report CPU and input/output statistics.</p><p id="67e02481-2b43-4213-85e0-634c3deed85f" class=""><code>iotop</code>: Display I/O usage by process.</p><p id="ceef0607-0ce1-4d7e-85a8-f2349183ade0" class=""><code>ip</code>: Show/manipulate routing, devices, policy routing, and tunnels.</
+p><p id="23036f8b-08e2-4783-8fc3-5cce33f8796c" class=""><code>ipcrm</code>: Remove a message queue, semaphore set, or shared memory segment.</p><p id="ce4a91a6-38f0-4898-9a75-caef9b591855" class=""><code>ipcs</code>: Report inter-process communication facilities status.</p><p id="9b885b9e-2637-4261-972c-8cc7a6f6547c" class=""><code>iptables</code>: Administration tool for IPv4 packet filtering and NAT.</p><p id="7d1fdb1e-73e2-41c1-be8c-acae0192bfd2" class=""><code>iptables-save</code>: Save current iptables rules to a file.</p><p id="9b137edb-d3a5-4fb3-8471-29570c9c52d2" class=""><code>iwconfig</code>: Configure a wireless network interface.</p><p id="166894ea-af95-4088-8ba4-95e4fe9f8e15" class=""><code>jobs</code>: List all background jobs.</p><p id="449862e1-5d23-4240-8fac-a1a3d2eee9cb" class=""><code>join</code>: Join lines of two files on a common field.</p><p id="2f3aba2a-c787-47ac-a47d-d390fc1d8539" class=""><code>journalctl</code>: Query the systemd journal or print journal entries.</p><p id="2f8e7d6d-715b-426e-8aef-a9f7d1d27b5f" class=""><code>jed</code>: A fast, compact editor based on the S-Lang library.</p><p id="d1715482-9fc5-44a3-a03f-75bf7196bf9d" class=""><code>kill</code>: Terminate processes by name or process ID.</p><p id="c3ebcdc6-c386-4329-a489-f2c4b216348d" class=""><code>last</code>: Show listing of last logged in users.</p><p id="54475d98-41e2-41a7-9473-e2c384ca57f6" class=""><code>less</code>: Display files or command output one page at a time.</p><p id="4770f893-5f19-4d67-9a9d-b2a7005ab7d0" class=""><code>let</code>: Perform arithmetic on shell variables.</p><p id="5421a3b7-495a-4750-a185-27447f662bab" class=""><code>ln</code>: Create links to files.</p><p id="7154b942-fe54-48eb-9857-a8a17bc11e2f" class=""><code>look</code>: Display lines beginning with a given string.</p><p id="65bba40b-eb6e-458a-93b0-198f306a2ff4" class=""><code>ls</code>: List directory contents.</p><p id="8ae5cd24-87a8-4ac0-a9af-20cec8d1a3c3" class=""><code>lsblk</code>: List block devices.</p><p id="283aa976-863e-42fd-aa1a-f951e185cfc6" class=""><code>lshw</code>: Display detailed hardware configuration.</p><p id="f553f78b-8745-4c2b-945f-ab9c9e67291a" class=""><code>lsmod</code>: Show the status of modules in the Linux Kernel.</p><p id="bd010623-7adc-46f0-8aaa-c6cb43a54271" class=""><code>lsof</code>: List open files.</p><p id="ad737ed0-3167-451d-b0bd-558ed9afc32d" class=""><code>lsusb</code>: List USB devices.</p><p id="03c6b704-2592-44f9-b2c8-eff6f35faf93" class=""><code>mailq</code>: Display the mail queue.</p><p id="93507c86-8f84-4b26-8aad-608163a634f7" class=""><code>man</code>: Display manual pages.</p><p id="a1a85960-6591-4146-bc6f-ac433dbc8cc2" class=""><code>md5sum</code>: Compute and check MD5 message digest.</p><p id="03682e06-d6f2-4df0-ac03-11e864cfc7ab" class=""><code>mkdir</code>: Create directories.</p><p id="848c1c23-3f76-4ad3-9099-edf4e7c9d55d" class=""><code>modinfo</code>: Show information about a kernel module.</p><p id="02e462a5-a510-42fb-93ac-a7f55cfdac11" class=""><code>more</code>: Display files or command output one page at a time.</p><p id="56bbf553-cb71-4499-bb53-2aed70456ce6" class=""><code>mount</code>: Mount a file system.</p><p id="f41b8758-3e1a-4cf7-954c-d58f2918e52e" class=""><code>mpstat</code>: Report processor statistics.</p><p id="4ecf82a3-9106-469d-a74d-09ca86ea4ffe" class=""><code>mv</code>: Move or rename files.</p><p id="2a8d8c20-e8da-4c09-9195-3ca6f7dc343a" class=""><code>nc(netcat)</code>: TCP/IP swiss army knife.</p><p id="d3b65bcd-171b-4fc3-9c32-a3b651a6d948" class=""><code>nmcli</code>: A command-line client for NetworkManager.</p><p id="29812f55-dbf2-45fe-aafe-92afe515b5d6" class=""><code>nano</code>: Command-line text editor.</p><p id="3dda80c7-d99f-4d45-b832-017db9f6368b" class=""><code>netstat</code>: Display network connections, routing tables, and more.</p><p id="ba58793c-d3b6-4a05-aa2e-4920f6283e73" class=""><code>nslookup</code>: Query Internet name servers interactively.</p><p id="e4f242db-2da3-468c-b8fc-5c328873aa6c" class=""><code>od</code>: Dump files in octal and other formats.</p><p id="6b6ed45b-2679-4834-8b56-93b6fdd5a8b0" class=""><code>passwd</code>: Change user password.</p><p id="775dd264-5567-4bda-91eb-df0ae2cc2cb9" class=""><code>paste</code>: Merge lines of files.</p><p id="7bf881fb-7d3d-4a57-bfd3-fc877039cf3b" class=""><code>pidof</code>: Find the process ID of a running program.</p><p id="895a2cd0-3544-4283-90dd-140b373a1038" class=""><code>pinky</code>: Lightweight user information utility.</p><p id="bc55d3ea-7c3a-4996-b51b-d86b41b43fad" class=""><code>pmap</code>: Display memory map of a process.</p><p id="7230cc91-cef5-41c4-b7bf-edc665b824a9" class=""><code>poweroff</code>: Power off the system.</p><p id="76b649b9-6028-43b2-a5e4-fe2e456aa197" class=""><code>printf</code>: Format and print data.</p><p id="68ab2efa-e0b3-4548-b6f5-abd8ac99e654" class=""><code>ps</code>: Report process status.</p><p id="a424349d-8f08-42aa-af76-65d3150ddac8" class=""><code>pwd</code>: Print current working directory.</p><p id="a295eabd-cd23-44f5-934b-99aaed2ea2a4" class=""><code>ranlib</code>: Generate index to archive.</p><p id="db39c231-7bce-4070-b00f-e6ae258bf306" class=""><code>rcp</code>: Copy files between hosts.</p><p id="7f6a53b9-2d1a-4e59-ace4-bbf08eb8c033" class=""><code>read</code>: Read a line from standard input.</p><p id="fa62f56a-e68f-4113-b4cd-1024030ed4c0" class=""><code>readelf</code>: Display information about ELF files.</p><p id="97f4c51b-9b90-4984-a057-0e6e72de48c2" class=""><code>readlink</code>: Print value of a symbolic link.</p><p id="d366b64a-53db-42db-9bd6-edd3a29d3035" class=""><code>reboot</code>: Reboot the system.</p><p id="cc9c98a8-745f-4576-937e-b091be56394c" class=""><code>rename</code>: Rename files.</p><p id="fdf741c5-f216-49e4-b0b4-1d73244397e4" class=""><code>reset</code>: Reset the terminal.</p><p id="5cf9b499-5a37-40b1-a001-3ac2dfe3cfd7" class=""><code>restore</code>: Restore a file system from a backup.</p><p id="465cf4cf-19f2-4d0d-8ce3-3045b6e680e2" class=""><code>return</code>: Exit a function.</p><p id="a38b6985-47fc-4aed-ad3d-802664f558da" class=""><code>rev</code>: Reverse lines of a file.</p><p id="5b0f23e0-9f24-439c-b3c9-8ecc87928159" class=""><code>rmdir</code>: Remove directories.</p><p id="06e90a87-c0fd-4791-ae8d-901fc8f22558" class=""><code>rm</code>: Remove files or directories.</p><p id="d5397575-5450-4f98-895f-a4936b3d39c0" class=""><code>rmmod</code>: Remove a module from the Linux Kernel.</p><p id="b54adc06-0040-4de0-9945-890a075aad5e" class=""><code>route</code>: Show/manipulate the IP routing table.</p><p id="27855e04-5b68-4741-86ce-4b7cf40c0283" class=""><code>rsync</code>: Remote file synchronization utility.</p><p id="6c2d0a7b-a31a-445f-98c9-ec9133763e12" class=""><code>sar</code>: System activity reporter.</p><p id="a9e3ade2-a1df-4ab4-b02f-b87038811d4f" class=""><code>scp</code>: Secure copy files between hosts.</p><p id="7cd762b3-f616-4003-932a-c088bebae776" class=""><code>screen</code>: Full-screen window manager.</p><p id="99a9fe99-8bec-416b-b02e-de6a379fc3ea" class=""><code>script</code>: Record a terminal session.</p><p id="481646af-339c-46a6-a4c8-4bec977efbad" class=""><code>scriptreply</code>: Play back typescripts, using timing information.</p><p id="05487588-9fb2-4001-998e-a7caaa32777a" class=""><code>sdiff</code>: Merge two files interactively.</p><p id="fb6b7fc6-a201-42f9-8d72-cfe37c805a3a" class=""><code>sed</code>: Stream editor for filtering and transforming text.</p><p id="e10b6866-49b1-46be-b0a0-ab1e81f15cf6" class=""><code>select</code>: Accept keyboard input.</p><p id="e80a883d-f7cc-4d48-9943-55beade074b8" class=""><code>seq</code>: Print sequences of numbers.</p><p id="04789138-b114-4b2c-8e36-a741c15e2765" class=""><code>setsid</code>: Run a program in a new session.</p><p id="21cfd651-20c3-45c0-a561-52fa615a53cb" class=""><code>shift</code>: Shift positional parameters in a script.</p><p id="4e4b28eb-69bc-44a6-b0ab-c82b98700e5a" class=""><code>showkey</code>: Display key codes.</p><p id="b5e9f8d9-fb58-4a2e-8a67-f78098e92248" class=""><code>shred</code>: Securely delete files.</p><p id="2e855608-15b3-449d-8160-75d82526dab1" class=""><code>shutdown</code>: Shut down the system.</p><p id="ea267d9b-a622-4236-bf4f-f50fd3d53532" class=""><code>sleep</code>: Delay for a specified amount of time.</p><p id="b5f3b0d0-966c-426f-83e9-d0498e99331f" class=""><code>sort</code>: Sort lines of text files.</p><p id="5589cd63-b1c4-42e8-8d54-710a5de12ff7" class=""><code>source</code>: Run commands from a file.</p><p id="92ae3518-4beb-4ad6-aef0-48e973d6e5a1" class=""><code>split</code>: Split a file into pieces.</p><p id="37d5714a-60b1-4e54-b105-db5c4140aa6a" class=""><code>ssh</code>: Secure shell client.</p><p id="9ee3d61f-126c-417f-9028-f90964568b01" class=""><code>strace</code>: Trace system calls and signals.</p><p id="bbb4b508-e1b2-41c3-b732-ceab1ae82dbf" class=""><code>stty</code>: Set terminal options.</p><p id="2a734d0c-d837-4e02-b9f7-b4be3f5ead6f" class=""><code>sum</code>: Print checksum and block counts for a file.</p><p id="bcd5e429-5ed2-49cc-a7c7-859392bec020" class=""><code>sync</code>: Synchronize data on disk with memory.</p><p id="a9cc52be-5067-4ca2-b996-110045673e23" class=""><code>systemctl</code>: Control the systemd system and service manager.</p><p id="1693fbb5-f6a9-4bde-9f65-61751d13059c" class=""><code>tac</code>: Concatenate and print files in reverse.</p><p id="2cca28c4-2171-4c8f-b342-4b847fc62b92" class=""><code>tail</code>: Output the last part of files.</p><p id="a92edf66-9119-4f75-9a47-117b48bfe0dd" class=""><code>tar</code>: Tape archive utility.</p><p id="804a9a42-386b-4b5f-8d50-290059d52292" class=""><code>tee</code>: Redirect output to multiple files.</p><p id="78b80422-0de1-4c1d-91ea-62b215fa46a1" class=""><code>time</code>: Time a simple command or give resource usage.</p><p id="7a01e762-6371-444b-b0be-77575e719510" class=""><code>top</code>: Display and update 
+sorted information about processes.</p><p id="fbb25cec-b4a3-4448-ad3b-ffe388fe9b4c" class=""><code>touch</code>: Change file timestamps.</p><p id="6a4d48f8-29ca-4cf4-a70a-cef90fb42d2a" class=""><code>traceroute</code>: Print the route packets trace to network host.</p><p id="3caaa21a-cca7-45d9-b170-32f1ca5c2a1a" class=""><code>tr</code>: Translate or delete characters.</p><p id="b63b5b29-a52e-4d28-b734-13bbe545f291" class=""><code>tracepath</code>: Trace path to a network host.</p><p id="da6f2d61-34f4-4eef-9046-d3e6a71021fe" class=""><code>tree</code>: List contents of directories in a tree-like format.</p><p id="1903f376-f766-4e90-ae2f-5a6ae0da4161" class=""><code>tty</code>: Print the file name of the terminal connected to standard input.</p><p id="08876af5-9c84-4a06-90d8-737d5f0137e9" class=""><code>type</code>: Indicate how a command name is interpreted.</p><p id="5a37c6a5-5cbc-49ba-a055-577a2ae11ab7" class=""><code>uname</code>: Print system information.</p><p id="17310f6f-527f-4185-b068-7668278b38f1" class=""><code>unalias</code>: Remove alias definitions.</p><p id="92f8c038-b924-4d02-acc7-568df7934482" class=""><code>unexpand</code>: Convert spaces to tabs.</p><p id="e188a501-fb23-40e7-a080-8663a669918c" class=""><code>uniq</code>: Filter adjacent matching lines from input.</p><p id="c0e06e69-8c46-49c5-b4c1-71a5b36ca5c2" class=""><code>unix2dos</code>: Convert text file format from Unix to DOS.</p><p id="e3a716a1-5a37-4d6d-89d1-3a5281036603" class=""><code>until</code>: Execute commands as long as a condition is false.</p><p id="bc6c6224-e51a-45c3-b3d5-a081d25785d4" class=""><code>uptime</code>: Show how long the system has been running.</p><p id="4f0c38b0-7e71-4df0-b0de-1965e123088e" class=""><code>username</code>: Print effective user ID.</p><p id="8a681b25-e7f4-4df7-9ffa-626c5c9e138b" class=""><code>useradd</code>: Create a new user or update default new user information.</p><p id="e87b0caa-b542-47af-ae45-4eb070add394" class=""><code>userdel</code>: Delete a user account and related files.</p><p id="6e9c1bc0-6d35-447b-895f-b9f719b02be1" class=""><code>usermod</code>: Modify a user account.</p><p id="2be03da7-abe3-471c-a1a2-15e0c5ff8171" class=""><code>users</code>: List users currently logged in.</p><p id="ef44c16a-2517-4a75-bdb3-d193322b0527" class=""><code>vi</code>: Text editor for Unix systems.</p><p id="ff60268c-568c-4b12-b755-5e9eaffae2db" class=""><code>vmstat</code>: Report virtual memory statistics.</p><p id="ec3f4d7a-b69c-4382-86eb-e3b808ef119b" class=""><code>vnstat</code>: Network traffic monitoring tool.</p><p id="6ff3ae7b-16df-48c1-9ca3-df703fc53c5d" class=""><code>w</code>: Show who is logged on and what they are doing.</p><p id="3b7d7717-dc4d-49d3-ab02-9f7032864003" class=""><code>wall</code>: Write a message to all users.</p><p id="e10015cd-f629-4b89-86e8-b5eee3378830" class=""><code>watch</code>: Execute a program periodically, showing output.</p><p id="f0501a30-555c-4dfb-a3b7-2bae604092fd" class=""><code>wc</code>: Print newline, word, and byte counts for each file.</p><p id="168cfcd4-c2c1-4350-8464-a14d0471daba" class=""><code>wget</code>: Retrieve files from the web.</p><p id="825bc761-6180-4a5e-9434-102153fce5c0" class=""><code>whatis</code>: Display a one-line description for a command.</p><p id="7c20e3ef-e412-4833-a59e-c2691fcad1f1" class=""><code>which</code>: Locate a command.</p><p id="badd2622-8ca3-4721-9ccb-dbd624d3b16c" class=""><code>while</code>: Execute commands repeatedly as long as a condition is true.</p><p id="fe7ff301-d409-4aa2-9c51-8549745af4f9" class=""><code>who</code>: Show who is logged on.</p><p id="c79fb04e-7868-465d-b87e-a25ca929c5db" class=""><code>whoami</code>: Print effective user ID.</p><p id="9b1f5fa1-725e-4975-a441-6007afccfdc2" class=""><code>write</code>: Send a message to another user.</p><p id="0c3ecbbb-17b6-4c8c-90db-3b4725236930" class=""><code>xargs</code>: Build and execute command lines from standard input.</p><p id="cd0d9f5d-2f41-4631-a275-c61e7ac087c2" class=""><code>xdg-open</code>: Open a file or URL using the preferred application.</p><p id="9b7269d5-787d-4d2c-aa20-ac72627b1ca4" class=""><code>yes</code>: Output a string repeatedly until killed.</p><p id="7c99799d-c1cd-49a1-b30e-248c91bc05c0" class=""><code>zip</code>: Package and compress files into a zip archive.</p><p id="fca369bc-b524-4853-a63d-a0ca97551f42" class=""><code>zdiff</code>: Compare compressed files.</p><p id="2c929b53-8b5e-473d-94fe-95e4d28f4a70" class=""><code>zdump</code>: Time zone dumper.</p><p id="b35dc363-223d-49a9-83f2-3650dbff74b8" class=""><code>zgrep</code>: Search compressed files for a regular expression.</p><p id="3fce9e3b-71fb-4076-8a45-c4c5787614db" class="">
+</p><p id="4eb92d09-cf53-4ff7-8146-738581115cab" class="">
+</p><blockquote id="39f95f86-9043-4617-aada-0456ab79db13" class="">Spy404 | <a href="https://github.com/spy404">My Github</a> |<a href="https://spy404.github.io"> My Portfolio</a> |<a href="https://gitlab.com/spy404"> My gitlab</a></blockquote></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
